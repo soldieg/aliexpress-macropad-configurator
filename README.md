@@ -4,6 +4,8 @@ Configurador Rust para Windows de mini teclados USB programáveis vendidos no Al
 
 **Windows x64** · [Baixar o ZIP na página de versões](https://github.com/soldieg/aliexpress-macropad-configurator/releases/latest) · [Guia em português](LEIA-ME.txt) · [English](#english)
 
+**Prévia Linux e macOS** · [Pacotes dos testes nativos](https://github.com/soldieg/aliexpress-macropad-configurator/actions/workflows/ports-preview.yml?query=branch%3Apreview%2Flinux-macos) · [Instalação, compatibilidade e testes pendentes](docs/platforms.md)
+
 ## Recursos
 
 - Configure teclas, cliques e os sentidos dos seletores giratórios. Identifique o aparelho USB e confira o perfil antes de gravar.

@@ -5,7 +5,7 @@ use std::{
     collections::HashMap,
     ffi::{c_char, c_void, CStr},
     fs,
-    path::PathBuf,
+    path::{Path, PathBuf},
     process::Command,
     ptr::{null, null_mut, NonNull},
     sync::{
@@ -14,7 +14,7 @@ use std::{
         Arc,
     },
     thread::{self, JoinHandle},
-    time::Instant,
+    time::{Duration, Instant},
 };
 
 type CfRef = *const c_void;
@@ -118,6 +118,7 @@ extern "C" {
 
 const CF_UTF8: u32 = 0x0800_0100;
 const CF_INT_32: isize = 3;
+const CF_INT_64: isize = 4;
 const NO_OPTIONS: u32 = 0;
 const HID_ACCESS: &str =
     "Permita Monitoramento de Entrada para o aplicativo nos Ajustes do Sistema do macOS.";
@@ -204,13 +205,15 @@ impl InputState {
         }
         let port = unsafe {
             let value = IOHIDDeviceGetProperty(device, self.location_key.as_ref());
-            let mut port = 0_i32;
+            let mut port = 0_i64;
             if !value.is_null()
                 && CFGetTypeID(value) == CFNumberGetTypeID()
-                && CFNumberGetValue(value, CF_INT_32, (&mut port as *mut i32).cast()) != 0
+                && CFNumberGetValue(value, CF_INT_64, (&mut port as *mut i64).cast()) != 0
                 && port != 0
             {
-                Some(port as u32)
+                u32::try_from(port)
+                    .ok()
+                    .or_else(|| i32::try_from(port).ok().map(|id| id as u32))
             } else {
                 None
             }
@@ -401,7 +404,11 @@ fn monitor(
         IOHIDManagerScheduleWithRunLoop(manager_ref, run_loop, mode);
         if ready.send(Ok(())).is_ok() {
             while !stop.load(Ordering::Acquire) {
-                CFRunLoopRunInMode(mode, 0.1, 0);
+                let outcome = CFRunLoopRunInMode(mode, 0.1, 0);
+                if matches!(outcome, 1 | 2) {
+                    // Finished/stopped runs can return immediately without a matching source.
+                    thread::sleep(Duration::from_millis(100));
+                }
             }
         }
         IOHIDManagerUnscheduleFromRunLoop(manager_ref, run_loop, mode);
@@ -619,6 +626,25 @@ fn replay_mouse(buttons: u8, scroll: i8, modifiers: u8) -> Result<(), String> {
     Ok(())
 }
 
+pub(crate) fn validate_replay(binding: &Binding) -> Result<(), String> {
+    match binding {
+        Binding::Keyboard(steps) => {
+            if let Some(&(_, usage)) = steps.iter().find(|&&(_, usage)| virtual_key(usage).is_none()) {
+                return Err(format!("Código de teclado sem reprodução no macOS: {usage:#04X}."));
+            }
+            require_output_access()
+        }
+        Binding::Mouse { buttons, .. } if buttons & !0x1f != 0 => {
+            Err("Botão de mouse sem reprodução no macOS.".into())
+        }
+        Binding::Mouse { .. } => require_output_access(),
+        Binding::Media(0xe9 | 0xea | 0xe2) => crate::audio::current().map(|_| ()),
+        Binding::Media(usage) => Err(format!(
+            "Ação de mídia sem reprodução global no macOS: {usage:#06X}. Mantenha essa tecla em modo direto."
+        )),
+    }
+}
+
 pub fn replay(binding: &Binding) -> Result<(), String> {
     match binding {
         Binding::Keyboard(steps) => replay_keyboard(steps),
@@ -789,7 +815,7 @@ fn startup_path() -> Result<PathBuf, String> {
         .join(format!("{APP_ID}.plist")))
 }
 
-fn owned_startup_file(path: &PathBuf) -> Result<bool, String> {
+fn owned_startup_file(path: &Path) -> Result<bool, String> {
     match fs::read_to_string(path) {
         Ok(xml) if xml.contains(PLIST_MARKER) => Ok(true),
         Ok(_) => Err(

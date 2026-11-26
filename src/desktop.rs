@@ -6,14 +6,16 @@ use crate::macos as native;
 pub use native::{replay, set_startup, shutdown, startup_enabled};
 use std::{
     fs::{self, File, OpenOptions, TryLockError},
-    sync::{atomic::{AtomicBool, Ordering}, mpsc, Arc},
+    sync::{
+        atomic::{AtomicBool, Ordering},
+        mpsc, Arc,
+    },
     thread::JoinHandle,
 };
 
 pub struct Listener {
     pub events: mpsc::Receiver<InputEvent>,
-    pub tray_available: bool,
-    _tray: Option<crate::desktop_tray::TrayHandle>,
+    tray: Option<crate::desktop_tray::TrayHandle>,
     stop: Arc<AtomicBool>,
     worker: Option<JoinHandle<()>>,
 }
@@ -31,11 +33,20 @@ impl Listener {
         let tray = crate::desktop_tray::open(events, wake).ok();
         Ok(Self {
             events: receiver,
-            tray_available: tray.is_some(),
-            _tray: tray,
+            tray,
             stop,
             worker: Some(worker),
         })
+    }
+
+    pub fn tray_available(&self) -> bool {
+        self.tray.as_ref().is_some_and(|tray| tray.available())
+    }
+
+    pub fn refresh_tray_language(&self) {
+        if let Some(tray) = &self.tray {
+            tray.refresh_language();
+        }
     }
 }
 

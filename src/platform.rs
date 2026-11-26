@@ -45,6 +45,10 @@ pub struct Listener {
 }
 
 impl Listener {
+    pub fn tray_available(&self) -> bool {
+        self.tray_available
+    }
+
     pub fn start_with_wake(
         vid: u16,
         pid: u16,
@@ -265,7 +269,6 @@ fn marker_event(vkey: u16, flags: u16, at: Instant) -> Option<InputEvent> {
         at,
     })
 }
-
 
 unsafe fn device_name(handle: windows_sys::Win32::Foundation::HANDLE) -> Option<String> {
     let mut chars = 0;
@@ -949,7 +952,6 @@ pub fn shutdown() -> Result<(), String> {
         Err(format!("Windows recusou o desligamento ({status})."))
     }
 }
-
 
 const MODIFIERS: [(u16, u16); 8] = [
     (VK_LCONTROL, 0x1d),

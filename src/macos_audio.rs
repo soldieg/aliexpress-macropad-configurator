@@ -39,31 +39,6 @@ extern "C" {
     fn AudioObjectIsPropertySettable(object: u32, address: *const Address, value: *mut u8) -> i32;
 }
 
-#[link(name = "AudioToolbox", kind = "framework")]
-extern "C" {
-    fn AudioHardwareServiceGetPropertyData(
-        object: u32,
-        address: *const Address,
-        qualifier_size: u32,
-        qualifier: *const c_void,
-        size: *mut u32,
-        data: *mut c_void,
-    ) -> i32;
-    fn AudioHardwareServiceSetPropertyData(
-        object: u32,
-        address: *const Address,
-        qualifier_size: u32,
-        qualifier: *const c_void,
-        size: u32,
-        data: *const c_void,
-    ) -> i32;
-    fn AudioHardwareServiceIsPropertySettable(
-        object: u32,
-        address: *const Address,
-        value: *mut u8,
-    ) -> i32;
-}
-
 #[derive(Clone, Copy)]
 struct Control {
     device: u32,
@@ -72,16 +47,11 @@ struct Control {
 
 impl Control {
     fn get<T: Default>(self) -> Result<T, String> {
-        let read = if self.address.selector == VIRTUAL_VOLUME {
-            AudioHardwareServiceGetPropertyData
-        } else {
-            AudioObjectGetPropertyData
-        };
         let mut value = T::default();
         let expected = size_of::<T>() as u32;
         let mut size = expected;
         let status = unsafe {
-            read(
+            AudioObjectGetPropertyData(
                 self.device,
                 &self.address,
                 0,
@@ -100,23 +70,14 @@ impl Control {
     }
 
     fn settable(self) -> bool {
-        let check = if self.address.selector == VIRTUAL_VOLUME {
-            AudioHardwareServiceIsPropertySettable
-        } else {
-            AudioObjectIsPropertySettable
-        };
         let mut value = 0;
-        (unsafe { check(self.device, &self.address, &mut value) }) == 0 && value != 0
+        (unsafe { AudioObjectIsPropertySettable(self.device, &self.address, &mut value) }) == 0
+            && value != 0
     }
 
     fn set<T>(self, value: &T) -> Result<(), String> {
-        let write = if self.address.selector == VIRTUAL_VOLUME {
-            AudioHardwareServiceSetPropertyData
-        } else {
-            AudioObjectSetPropertyData
-        };
         let status = unsafe {
-            write(
+            AudioObjectSetPropertyData(
                 self.device,
                 &self.address,
                 0,

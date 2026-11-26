@@ -1,4 +1,6 @@
 use eframe::egui;
+#[cfg(windows)]
+use std::ptr::null_mut;
 use std::{
     borrow::Cow,
     collections::HashMap,
@@ -10,8 +12,6 @@ use std::{
     },
 };
 use unicode_bidi::{BidiInfo, Level};
-#[cfg(windows)]
-use std::ptr::null_mut;
 #[cfg(windows)]
 use windows_sys::Win32::Globalization::{GetUserPreferredUILanguages, MUI_LANGUAGE_NAME};
 
@@ -187,10 +187,37 @@ pub fn tr(text: &str) -> &str {
     translation(text, language)
 }
 
-#[cfg(not(windows))]
-pub fn tr_native(text: &str) -> &str {
-    // AppKit and StatusNotifier menu hosts process bidi and Arabic shaping themselves.
-    translation(text, ACTIVE.load(Ordering::Relaxed))
+pub fn system_text(text: &str) -> std::borrow::Cow<'_, str> {
+    #[cfg(windows)]
+    {
+        tr(text).into()
+    }
+    #[cfg(not(windows))]
+    {
+        let system = if cfg!(target_os = "linux") {
+            "Linux"
+        } else {
+            "macOS"
+        };
+        let translated = native(text);
+        if !translated.contains("Windows") && !translated.contains("ويندوز") {
+            return tr(text).into();
+        }
+        let translated = translated
+            .replace("Windows", system)
+            .replace("ويندوز", system);
+        if matches!(ACTIVE.load(Ordering::Relaxed), 8 | 9 | 14) {
+            let shaped = arabic_reshaper::ArabicReshaper::new().reshape(&translated);
+            let bidi = BidiInfo::new(&shaped, Some(Level::rtl()));
+            if let Some(para) = bidi.paragraphs.first() {
+                return bidi
+                    .reorder_line(para, para.range.clone())
+                    .into_owned()
+                    .into();
+            }
+        }
+        translated.into()
+    }
 }
 
 pub fn model(name: &str) -> &str {
@@ -285,7 +312,12 @@ pub fn formatted(template: &str, args: &[&str]) -> String {
 }
 
 fn locale_index(locale: &str) -> Option<usize> {
-    let lower = locale.trim().split(['.', '@']).next()?.replace('_', "-").to_ascii_lowercase();
+    let lower = locale
+        .trim()
+        .split(['.', '@'])
+        .next()?
+        .replace('_', "-")
+        .to_ascii_lowercase();
     if lower == "ar-eg" || lower == "arz" {
         return Some(9);
     }
@@ -321,7 +353,8 @@ fn system_language() -> usize {
 
 #[cfg(target_os = "linux")]
 fn system_language() -> usize {
-    ["LC_ALL", "LC_MESSAGES", "LANG"].into_iter()
+    ["LC_ALL", "LC_MESSAGES", "LANG"]
+        .into_iter()
         .filter_map(|key| std::env::var(key).ok())
         .find_map(|locale| locale_index(&locale))
         .unwrap_or(0)
@@ -335,17 +368,34 @@ fn system_language() -> usize {
         fn CFLocaleCopyPreferredLanguages() -> *const c_void;
         fn CFArrayGetCount(array: *const c_void) -> isize;
         fn CFArrayGetValueAtIndex(array: *const c_void, index: isize) -> *const c_void;
-        fn CFStringGetCString(text: *const c_void, buffer: *mut std::ffi::c_char, size: isize, encoding: u32) -> u8;
+        fn CFStringGetCString(
+            text: *const c_void,
+            buffer: *mut std::ffi::c_char,
+            size: isize,
+            encoding: u32,
+        ) -> u8;
         fn CFRelease(value: *const c_void);
     }
     unsafe {
         let languages = CFLocaleCopyPreferredLanguages();
-        if languages.is_null() { return 0; }
+        if languages.is_null() {
+            return 0;
+        }
         let found = (0..CFArrayGetCount(languages)).find_map(|index| {
             let value = CFArrayGetValueAtIndex(languages, index);
             let mut buffer = [0; 96];
-            (CFStringGetCString(value, buffer.as_mut_ptr(), buffer.len() as isize, 0x08000100) != 0)
-                .then(|| CStr::from_ptr(buffer.as_ptr()).to_str().ok().and_then(locale_index))
+            (CFStringGetCString(
+                value,
+                buffer.as_mut_ptr(),
+                buffer.len() as isize,
+                0x08000100,
+            ) != 0)
+                .then(|| {
+                    CStr::from_ptr(buffer.as_ptr())
+                        .to_str()
+                        .ok()
+                        .and_then(locale_index)
+                })
                 .flatten()
         });
         CFRelease(languages);
@@ -399,29 +449,48 @@ fn activate(ctx: &egui::Context, setting: Option<usize>) {
         "zh" | "ja" => &["/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc"],
         "hi" | "mr" => &["/usr/share/fonts/truetype/noto/NotoSansDevanagari-Regular.ttf"],
         "bn" => &["/usr/share/fonts/truetype/noto/NotoSansBengali-Regular.ttf"],
-        "ar" | "arz" | "ur" => &["/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", "/usr/share/fonts/truetype/noto/NotoSansArabic-Regular.ttf"],
+        "ar" | "arz" | "ur" => &[
+            "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+            "/usr/share/fonts/truetype/noto/NotoSansArabic-Regular.ttf",
+        ],
         _ => &[],
     };
     #[cfg(target_os = "macos")]
     let files: &[&str] = match LANGUAGES[index].0 {
-        "zh" => &["/System/Library/Fonts/PingFang.ttc", "/System/Library/Fonts/Hiragino Sans GB.ttc"],
-        "ja" => &["/System/Library/Fonts/ヒラギノ角ゴシック W3.ttc", "/System/Library/Fonts/Hiragino Sans W3.ttc"],
-        "hi" | "mr" => &["/System/Library/Fonts/Devanagari Sangam MN.ttc", "/System/Library/Fonts/Supplemental/Devanagari Sangam MN.ttc", "/System/Library/Fonts/Supplemental/DevanagariMT.ttc"],
-        "bn" => &["/System/Library/Fonts/Bangla Sangam MN.ttc", "/System/Library/Fonts/Supplemental/Bangla Sangam MN.ttc"],
-        "ar" | "arz" | "ur" => &["/System/Library/Fonts/Supplemental/Arial.ttf", "/System/Library/Fonts/GeezaPro.ttc"],
+        "zh" => &[
+            "/System/Library/Fonts/PingFang.ttc",
+            "/System/Library/Fonts/Hiragino Sans GB.ttc",
+        ],
+        "ja" => &[
+            "/System/Library/Fonts/ヒラギノ角ゴシック W3.ttc",
+            "/System/Library/Fonts/Hiragino Sans W3.ttc",
+        ],
+        "hi" | "mr" => &[
+            "/System/Library/Fonts/Devanagari Sangam MN.ttc",
+            "/System/Library/Fonts/Supplemental/Devanagari Sangam MN.ttc",
+            "/System/Library/Fonts/Supplemental/DevanagariMT.ttc",
+        ],
+        "bn" => &[
+            "/System/Library/Fonts/Bangla Sangam MN.ttc",
+            "/System/Library/Fonts/Supplemental/Bangla Sangam MN.ttc",
+        ],
+        "ar" | "arz" | "ur" => &[
+            "/System/Library/Fonts/Supplemental/Arial.ttf",
+            "/System/Library/Fonts/GeezaPro.ttc",
+        ],
         _ => &[],
     };
     #[cfg(not(windows))]
     let fallback = files.iter().find_map(|file| fs::read(file).ok());
     let mut fonts = egui::FontDefinitions::default();
     if let Some(data) = fallback {
-            let name = "windows-fallback".to_owned();
-            fonts
-                .font_data
-                .insert(name.clone(), egui::FontData::from_owned(data).into());
-            for family in [egui::FontFamily::Proportional, egui::FontFamily::Monospace] {
-                fonts.families.entry(family).or_default().push(name.clone());
-            }
+        let name = "windows-fallback".to_owned();
+        fonts
+            .font_data
+            .insert(name.clone(), egui::FontData::from_owned(data).into());
+        for family in [egui::FontFamily::Proportional, egui::FontFamily::Monospace] {
+            fonts.families.entry(family).or_default().push(name.clone());
+        }
     }
     ctx.set_fonts(fonts);
 }

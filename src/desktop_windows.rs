@@ -29,7 +29,11 @@ pub mod countdown_window {
         }
 
         pub fn render(&mut self, ctx: &egui::Context) {
-            let title = if self.dry_run { "Simulação de desligamento" } else { "Desligamento do computador" };
+            let title = if self.dry_run {
+                "Simulação de desligamento"
+            } else {
+                "Desligamento do computador"
+            };
             let title = crate::i18n::tr(title);
             let seconds = self.remaining.as_millis().div_ceil(1000);
             ctx.show_viewport_immediate(
@@ -44,14 +48,17 @@ pub mod countdown_window {
                         ui.heading(title);
                         ui.label(egui::RichText::new(format!("{seconds} s")).size(36.));
                         ui.add(egui::ProgressBar::new(self.remaining.as_secs_f32() / 5.));
-                        if ui.button(crate::i18n::tr("Cancelar")).clicked() ||
-                            child.input(|input| input.viewport().close_requested() || input.key_pressed(egui::Key::Escape))
+                        if ui.button(crate::i18n::tr("Cancelar")).clicked()
+                            || child.input(|input| {
+                                input.viewport().close_requested()
+                                    || input.key_pressed(egui::Key::Escape)
+                            })
                         {
                             self.cancelled.set(true);
                             ctx.request_repaint();
                         }
                     });
-                }
+                },
             );
             ctx.request_repaint_after(Duration::from_millis(80));
         }
@@ -90,18 +97,34 @@ pub mod volume_osd {
                 .with_mouse_passthrough(true)
                 .with_window_level(egui::WindowLevel::AlwaysOnTop);
             if let Some(monitor) = ctx.input(|input| input.viewport().monitor_size) {
-                viewport = viewport.with_position([(monitor.x - 272.) / 2., (monitor.y - 156.).max(0.)]);
+                viewport =
+                    viewport.with_position([(monitor.x - 272.) / 2., (monitor.y - 156.).max(0.)]);
             }
-            ctx.show_viewport_immediate(egui::ViewportId::from_hash_of("macro-volume"), viewport, |child, _| {
-                egui::CentralPanel::default()
-                    .frame(egui::Frame::new().fill(egui::Color32::from_rgb(25, 32, 40)).inner_margin(15))
-                    .show(child, |ui| {
-                        ui.horizontal_centered(|ui| {
-                            ui.add(egui::ProgressBar::new(f32::from(self.level) / 100.).desired_width(157.));
-                            ui.label(egui::RichText::new(format!("{}%", self.level)).size(23.).strong());
+            ctx.show_viewport_immediate(
+                egui::ViewportId::from_hash_of("macro-volume"),
+                viewport,
+                |child, _| {
+                    egui::CentralPanel::default()
+                        .frame(
+                            egui::Frame::new()
+                                .fill(egui::Color32::from_rgb(25, 32, 40))
+                                .inner_margin(15),
+                        )
+                        .show(child, |ui| {
+                            ui.horizontal_centered(|ui| {
+                                ui.add(
+                                    egui::ProgressBar::new(f32::from(self.level) / 100.)
+                                        .desired_width(157.),
+                                );
+                                ui.label(
+                                    egui::RichText::new(format!("{}%", self.level))
+                                        .size(23.)
+                                        .strong(),
+                                );
+                            });
                         });
-                    });
-            });
+                },
+            );
             ctx.request_repaint_after(until - now);
         }
     }

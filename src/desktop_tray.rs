@@ -1,4 +1,4 @@
-use crate::{i18n::tr_native as tr, input::InputEvent};
+use crate::{i18n::native as tr, input::InputEvent};
 use std::sync::{mpsc::Sender, Arc};
 
 const LOGO: &[u8] = include_bytes!("../assets/logo.png");

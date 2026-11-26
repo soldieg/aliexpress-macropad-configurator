@@ -9,14 +9,22 @@ fn wpctl(args: &[&str]) -> Result<String, String> {
         .output()
         .map_err(|error| format!("PipeWire/WirePlumber (wpctl): {error}"))?;
     if !output.status.success() {
-        return Err(format!("PipeWire/WirePlumber (wpctl): {}", String::from_utf8_lossy(&output.stderr).trim()));
+        return Err(format!(
+            "PipeWire/WirePlumber (wpctl): {}",
+            String::from_utf8_lossy(&output.stderr).trim()
+        ));
     }
     Ok(String::from_utf8_lossy(&output.stdout).into_owned())
 }
 
 fn level(output: &str) -> Option<f32> {
-    output.strip_prefix("Volume:")?.split_whitespace().next()?.parse::<f32>()
-        .ok().filter(|value| value.is_finite())
+    output
+        .strip_prefix("Volume:")?
+        .split_whitespace()
+        .next()?
+        .parse::<f32>()
+        .ok()
+        .filter(|value| value.is_finite())
 }
 
 fn read() -> Result<f32, String> {

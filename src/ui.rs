@@ -1,5 +1,5 @@
 use super::*;
-use crate::i18n::tr;
+use crate::i18n::{system_text, tr};
 use egui::{Color32, FontId, Rect, RichText, Vec2};
 pub(crate) mod board_art;
 
@@ -387,7 +387,7 @@ impl App {
                             hint(ui, tr("As ações individuais salvas continuam disponíveis ao pressionar uma tecla sozinha."));
                         }
                         if self.gesture_draft.enabled && !self.simulate_draft {
-                            ui.label(tr(if self.gesture_draft.shutdown_armed {
+                            ui.label(system_text(if self.gesture_draft.shutdown_armed {
                                 if self.shutdown_trial.is_complete() {
                                     "O atalho da tela e o desligamento do Windows estarão ativos."
                                 } else {
@@ -523,15 +523,15 @@ impl App {
             self.usb_dialog = Some(device::usb_candidates());
         }
         let current = self.language.map_or_else(
-            || tr("Idioma do Windows"),
-            |index| tr(i18n::LANGUAGES[index].1),
+            || system_text("Idioma do Windows"),
+            |index| tr(i18n::LANGUAGES[index].1).into(),
         );
         let mut choice = self.language;
         egui::ComboBox::from_id_salt("interface-language")
             .selected_text(current)
             .width(118.0)
             .show_ui(ui, |ui| {
-                ui.selectable_value(&mut choice, None, tr("Idioma do Windows"));
+                ui.selectable_value(&mut choice, None, system_text("Idioma do Windows"));
                 for (index, (_, name)) in i18n::LANGUAGES.iter().enumerate() {
                     ui.selectable_value(&mut choice, Some(index), tr(name));
                 }
@@ -540,7 +540,13 @@ impl App {
             .on_hover_text(tr("Idioma"));
         if choice != self.language {
             match i18n::save(ui.ctx(), choice) {
-                Ok(()) => self.language = choice,
+                Ok(()) => {
+                    self.language = choice;
+                    #[cfg(not(windows))]
+                    if let Some(listener) = &self.listener {
+                        listener.refresh_tray_language();
+                    }
+                }
                 Err(error) => self.result(Err(error)),
             }
         }
@@ -599,8 +605,8 @@ impl App {
             }
             ui.separator();
             let mut enabled = self.startup_enabled;
-            if ui.checkbox(&mut enabled, tr("Iniciar com o Windows na bandeja"))
-                .on_hover_text(tr("Na entrada do Windows, inicia na bandeja ou minimizado até o teclado conectar."))
+            if ui.checkbox(&mut enabled, system_text("Iniciar com o Windows na bandeja"))
+                .on_hover_text(system_text("Na entrada do Windows, inicia na bandeja ou minimizado até o teclado conectar."))
                 .changed()
             {
                 match platform::set_startup(enabled) {
@@ -1018,7 +1024,7 @@ impl App {
             if ui.small_button(tr("Conferir volume")).clicked() {
                 let result = audio::current().map(|level| {
                     self.volume_osd.show(level);
-                    format!("{}: {level}%.", tr("Volume do Windows"))
+                    format!("{}: {level}%.", system_text("Volume do Windows"))
                 });
                 self.result(result);
             }
@@ -1026,9 +1032,11 @@ impl App {
         hint(
             ui,
             if managed {
-                tr("O mesmo passo vale para todos os giros configurados como volume. O aplicativo pode ficar na bandeja.")
+                tr("O mesmo passo vale para todos os giros configurados como volume. O aplicativo pode ficar na bandeja.").into()
             } else {
-                tr("O volume direto usa o passo do Windows e funciona com o aplicativo fechado.")
+                system_text(
+                    "O volume direto usa o passo do Windows e funciona com o aplicativo fechado.",
+                )
             },
         );
     }
@@ -1163,7 +1171,7 @@ impl App {
         let host = self.profile().map_or(0, |p| p.host);
         card(ui, |ui| {
             ui.heading(tr("Enviar ao tecladinho"));
-            hint(ui,tr("O aparelho envia os sinais das teclas. O aplicativo executa as combinações no Windows."));
+            hint(ui,system_text("O aparelho envia os sinais das teclas. O aplicativo executa as combinações no Windows."));
             if ui
                 .add_enabled(
                     !self.devices.is_empty(),

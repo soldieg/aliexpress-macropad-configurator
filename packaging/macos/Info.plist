@@ -10,6 +10,8 @@
     <string>mini-teclado-usb</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
+    <key>CFBundleIconFile</key>
+    <string>MacroPad</string>
     <key>CFBundleVersion</key>
     <string>0.8.0</string>
     <key>CFBundleShortVersionString</key>

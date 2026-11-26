@@ -72,16 +72,32 @@ jobs:
       - name: Package macOS
         if: runner.os == 'macOS'
         run: |
-          mkdir -p "bundle/Macro para Mini Teclados.app/Contents/MacOS" dist
+          mkdir -p "bundle/Macro para Mini Teclados.app/Contents/"{MacOS,Resources} dist "$RUNNER_TEMP/MacroPad.iconset"
           app="bundle/Macro para Mini Teclados.app"
           install -m 755 target/release/mini-teclado-usb "$app/Contents/MacOS/"
           cp packaging/macos/Info.plist "$app/Contents/"
+          for size in 16 32 128 256 512; do
+            sips -z "$size" "$size" assets/logo.png --out "$RUNNER_TEMP/MacroPad.iconset/icon_${size}x${size}.png" >/dev/null
+            pixels=$((size * 2))
+            sips -z "$pixels" "$pixels" assets/logo.png --out "$RUNNER_TEMP/MacroPad.iconset/icon_${size}x${size}@2x.png" >/dev/null
+          done
+          iconutil -c icns "$RUNNER_TEMP/MacroPad.iconset" -o "$app/Contents/Resources/MacroPad.icns"
           plutil -lint "$app/Contents/Info.plist"
           codesign --force --sign - "$app"
           codesign --verify --strict "$app"
           file "$app/Contents/MacOS/mini-teclado-usb"
           cp LICENSE docs/platforms.md bundle/
-          ditto -c -k --keepParent bundle dist/mini-teclado-usb-${{ matrix.artifact }}.zip
+          ditto -c -k bundle dist/mini-teclado-usb-${{ matrix.artifact }}.zip
+      - name: macOS launch smoke test
+        if: runner.os == 'macOS'
+        env:
+          MINI_TECLADO_CONFIG: ${{ runner.temp }}/macropad-smoke.json
+        run: |
+          "bundle/Macro para Mini Teclados.app/Contents/MacOS/mini-teclado-usb" >"$RUNNER_TEMP/macropad-smoke.log" 2>&1 &
+          pid=$!
+          trap 'kill "$pid" 2>/dev/null || true; cat "$RUNNER_TEMP/macropad-smoke.log"' EXIT
+          sleep 5
+          kill -0 "$pid"
       - uses: actions/upload-artifact@v4
         with:
           name: mini-teclado-usb-${{ matrix.artifact }}

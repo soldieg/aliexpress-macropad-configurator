@@ -8,4 +8,9 @@ SUBSYSTEM=="hidraw", KERNEL=="hidraw*", ATTRS{idVendor}=="1189", ATTRS{idProduct
 SUBSYSTEM=="hidraw", KERNEL=="hidraw*", ATTRS{idVendor}=="1189", ATTRS{idProduct}=="8840", TAG+="uaccess"
 SUBSYSTEM=="hidraw", KERNEL=="hidraw*", ATTRS{idVendor}=="1189", ATTRS{idProduct}=="8890", TAG+="uaccess"
 SUBSYSTEM=="hidraw", KERNEL=="hidraw*", ATTRS{idVendor}=="6d7b", ATTRS{idProduct}=="dcfa", TAG+="uaccess"
+SUBSYSTEM=="input", KERNEL=="event*", ATTRS{idVendor}=="1189", ATTRS{idProduct}=="8810", TAG+="uaccess"
+SUBSYSTEM=="input", KERNEL=="event*", ATTRS{idVendor}=="1189", ATTRS{idProduct}=="883[0-3]", TAG+="uaccess"
+SUBSYSTEM=="input", KERNEL=="event*", ATTRS{idVendor}=="1189", ATTRS{idProduct}=="8890", TAG+="uaccess"
+SUBSYSTEM=="input", KERNEL=="event*", ATTRS{idVendor}=="1189", ATTRS{idProduct}=="8840", TAG+="uaccess"
+SUBSYSTEM=="input", KERNEL=="event*", ATTRS{idVendor}=="6d7b", ATTRS{idProduct}=="dcfa", TAG+="uaccess"
 

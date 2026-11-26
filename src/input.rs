@@ -116,7 +116,9 @@ pub(crate) fn scan_code(usage: u8) -> Option<u16> {
         0x28..=0x65 => STANDARD_AND_PAD[(usage - 0x28) as usize],
         0x87 => 0x73,
         0x89 => 0x7d,
-        0xe0..=0xe7 => [0x1d, 0x2a, 0x38, 0xe05b, 0xe01d, 0x36, 0xe038, 0xe05c][(usage - 0xe0) as usize],
+        0xe0..=0xe7 => {
+            [0x1d, 0x2a, 0x38, 0xe05b, 0xe01d, 0x36, 0xe038, 0xe05c][(usage - 0xe0) as usize]
+        }
         _ => return None,
     };
     (code != 0).then_some(code)
@@ -130,6 +132,10 @@ impl DirectInput {
             0x68..=0x73 => (0, 0x7c + u16::from(usage - 0x68)),
             _ => (scan_code(usage)?, 0),
         };
-        Some(Self::Keyboard { scan, vk, modifiers })
+        Some(Self::Keyboard {
+            scan,
+            vk,
+            modifiers,
+        })
     }
 }

@@ -12,7 +12,7 @@ O configurador usa a mesma interface Rust/egui nas três plataformas. Layouts, e
 
 ## Linux x86-64
 
-Extraia o pacote e mantenha o executável em um caminho permanente se for ativar o início automático. A compilação do pacote usa Ubuntu 24.04. Para permitir acesso ao dispositivo pela sessão atual, instale a regra incluída. Ela se restringe aos VID/PID listados no arquivo.
+Extraia o pacote e mantenha o executável em um caminho permanente se for ativar o início automático. A compilação do pacote usa Ubuntu 24.04. No X11, instale `libxkbcommon-x11-0` se a biblioteca estiver ausente. Para permitir acesso ao dispositivo pela sessão atual, instale a regra incluída. Ela se restringe aos VID/PID listados no arquivo.
 
 ```sh
 sudo install -m 0644 70-mini-teclado-usb.rules /etc/udev/rules.d/

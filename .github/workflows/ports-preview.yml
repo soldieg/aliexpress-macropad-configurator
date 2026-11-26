@@ -24,6 +24,7 @@ jobs:
           - runner: macos-15-intel
             artifact: macos-x86_64
     runs-on: ${{ matrix.runner }}
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - name: Update Rust
@@ -34,7 +35,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libxkbcommon-dev libwayland-dev libgl1-mesa-dri libegl1 xvfb xauth xdotool imagemagick
+          sudo apt-get install -y libxkbcommon-dev libxkbcommon-x11-0 libwayland-dev libgl1-mesa-dri libegl1 xvfb xauth xdotool imagemagick
       - name: Tests
         run: cargo +stable test --locked
       - name: Release build
@@ -51,7 +52,7 @@ jobs:
             pid=$!
             trap "kill $pid 2>/dev/null || true; cat \"$RUNNER_TEMP/macropad-smoke.log\"" EXIT
             for attempt in {1..30}; do
-              if window=$(xdotool search --onlyvisible --pid "$pid" --name "Macro para Mini Teclados" 2>/dev/null | head -1) && [ -n "$window" ]; then
+              if window=$(xdotool search --all --onlyvisible --pid "$pid" --name "Macro para Mini Teclados" 2>/dev/null | head -1) && [ -n "$window" ]; then
                 sleep 1
                 import -window "$window" dist/linux-x11.png
                 exit 0

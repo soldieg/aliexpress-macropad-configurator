@@ -132,7 +132,7 @@ mod native {
         let (width, height) = pixels.dimensions();
         let mut data = pixels.into_raw();
         // StatusNotifierItem requires ARGB32 in network byte order.
-        for pixel in data.chunks_exact_mut(4) {
+        for pixel in data.as_chunks_mut::<4>().0 {
             pixel.rotate_right(1);
         }
 

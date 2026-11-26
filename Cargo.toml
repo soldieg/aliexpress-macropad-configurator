@@ -1,6 +1,6 @@
 [package]
 name = "mini-teclado-usb"
-version = "0.8.0-alpha.1"
+version = "0.8.0-alpha.2"
 edition = "2021"
 license = "GPL-3.0-only"
 description = "Configurator for AliExpress USB macro keypads and rotary encoders"

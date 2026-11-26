@@ -41,12 +41,32 @@ pub struct Listener {
     pub events: Receiver<InputEvent>,
     pub tray_available: bool,
     window: HWND,
+    target: (u16, u16),
     worker: Option<JoinHandle<()>>,
 }
 
 impl Listener {
     pub fn tray_available(&self) -> bool {
         self.tray_available
+    }
+
+    pub fn set_target(&mut self, vid: u16, pid: u16) -> Vec<InputEvent> {
+        if self.target == (vid, pid) {
+            return Vec::new();
+        }
+        unsafe {
+            SendMessageW(
+                self.window,
+                WM_SELECT_DEVICE,
+                usize::from(vid),
+                pid as isize,
+            )
+        };
+        self.target = (vid, pid);
+        self.events
+            .try_iter()
+            .filter(|event| matches!(event, InputEvent::ShowWindow | InputEvent::Quit))
+            .collect()
     }
 
     pub fn start_with_wake(
@@ -98,6 +118,7 @@ impl Listener {
                 events: event_rx,
                 tray_available,
                 window: window as HWND,
+                target: (vid, pid),
                 worker: Some(worker),
             }),
             other => {
@@ -124,6 +145,7 @@ impl Drop for Listener {
 }
 
 const WM_TRAY: u32 = WM_APP + 1;
+const WM_SELECT_DEVICE: u32 = WM_APP + 2;
 const TRAY_KEY_SELECT: u32 = NIN_SELECT | 1;
 
 struct ListenerState {
@@ -815,6 +837,18 @@ unsafe extern "system" fn window_proc(
 
     let state = &mut *state_ptr;
     match message {
+        WM_SELECT_DEVICE => {
+            state.vid = wparam as u16;
+            state.pid = lparam as u16;
+            state.devices = if state.vid == 0 && state.pid == 0 {
+                InputTopology::default()
+            } else {
+                selected_inputs(state.vid, state.pid, None)
+            };
+            state.consumers.clear();
+            state.modifiers = 0;
+            return 0;
+        }
         WM_INPUT => read_raw_input(state, lparam),
         WM_INPUT_DEVICE_CHANGE => {
             // Enumeration can still include a just-removed handle when the notification arrives.
@@ -1292,13 +1326,18 @@ mod tests {
                 .find(|entry| entry.usUsagePage == 1 && entry.usUsage == 6)
                 .map(|device| device.hwndTarget)
         };
-        let listener = Listener::start_with_wake(0x1189, 0x8890, || {}).unwrap();
+        let mut listener = Listener::start_with_wake(0, 0, || {}).unwrap();
+        let window = listener.window;
+        assert!(listener.set_target(0x1189, 0x8890).is_empty());
+        assert_eq!(listener.target, (0x1189, 0x8890));
         assert!(unsafe {
             registered_inputs()
                 .into_iter()
                 .find(|entry| entry.usUsagePage == 1 && entry.usUsage == 6)
         }
         .is_some_and(|device| device.hwndTarget == listener.window));
+        listener.set_target(0, 0);
+        assert_eq!(listener.window, window);
         let tray = listener.tray_available;
         drop(listener);
         assert_eq!(

@@ -384,7 +384,7 @@ impl App {
                                 &[&unknown.join(", ")],
                             ));
                         } else {
-                            hint(ui, tr("As ações individuais salvas continuam disponíveis ao pressionar uma tecla sozinha."));
+                            hint(ui, tr("As teclas usadas em combinações dependem do aplicativo na bandeja. Restaure o modo direto para usá-las com o aplicativo fechado."));
                         }
                         if self.gesture_draft.enabled && !self.simulate_draft {
                             ui.label(system_text(if self.gesture_draft.shutdown_armed {
@@ -958,8 +958,11 @@ impl App {
         if managed {
             hint(
                 ui,
-                tr("Ação individual em modo combinado. Salvar aqui mantém os sinais das combinações."),
+                tr("As teclas usadas em combinações dependem do aplicativo na bandeja. Restaure o modo direto para usá-las com o aplicativo fechado."),
             );
+            if ui.button(tr("Restaurar modo direto")).clicked() {
+                self.confirm = Some(Confirm::Restore);
+            }
         }
         if ui
             .add_enabled(
@@ -1140,6 +1143,9 @@ impl App {
     fn request_gesture_apply(&mut self, ctx: &egui::Context) {
         let available = ((1u16 << self.gesture_slots().len()) - 1) as u8;
         match gesture_targets(self.gesture_draft, available) {
+            Ok(0) if self.profile().is_some_and(|profile| profile.host != 0) => {
+                self.confirm = Some(Confirm::Restore);
+            }
             Ok(0) => {
                 let result = self.alter_host(ctx, Confirm::Activate);
                 self.result(result);
@@ -1188,6 +1194,7 @@ impl App {
             }
             if host != 0 {
                 ui.separator();
+                hint(ui, tr("As teclas usadas em combinações dependem do aplicativo na bandeja. Restaure o modo direto para usá-las com o aplicativo fechado."));
                 hint(
                     ui,
                     if self.simulate {

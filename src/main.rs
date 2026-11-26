@@ -478,6 +478,12 @@ impl App {
             ),
         };
         app.scan(ctx);
+        #[cfg(windows)]
+        if app.listener.is_none() {
+            if let Err(error) = app.attach_listener(ctx, 0, 0) {
+                app.status = error;
+            }
+        }
         if app.layout.is_none() {
             app.show_offline_layout();
         }
@@ -485,6 +491,25 @@ impl App {
             app.status = e.clone();
         }
         app
+    }
+
+    #[cfg(windows)]
+    fn initialize_windows_startup(&mut self, marker: &std::path::Path) {
+        if std::env::var_os("MINI_TECLADO_CONFIG").is_none()
+            && (self.startup_enabled || !marker.is_file())
+        {
+            match platform::set_startup(true) {
+                Ok(()) => self.startup_enabled = true,
+                Err(error) => self.status = error,
+            }
+        }
+        if !marker.is_file() {
+            if let Err(error) = std::fs::create_dir_all(device::settings_dir())
+                .and_then(|()| std::fs::write(marker, b"1\n"))
+            {
+                self.status = error.to_string();
+            }
+        }
     }
 
     fn profile(&self) -> Option<&Profile> {
@@ -737,12 +762,19 @@ impl App {
                             .count()
                             != 1
                     {
-                        self.listener = None;
+                        #[cfg(windows)]
+                        let _ = self.attach_listener(ctx, 0, 0);
+                        #[cfg(not(windows))]
+                        {
+                            self.listener = None;
+                            show_window(ctx);
+                        }
                         self.engine.reset();
                         self.simulate = true;
-                        show_window(ctx);
                         self.status =
                             "Dois aparelhos iguais detectados. A escuta foi interrompida.".into();
+                    } else if cfg!(windows) {
+                        let _ = self.listen(ctx);
                     }
                 }
             }
@@ -755,6 +787,7 @@ impl App {
     }
 
     fn select(&mut self, ctx: &egui::Context) {
+        #[cfg(not(windows))]
         let was_listening = self.listener.take().is_some();
         self.engine.reset();
         self.raw_pressed = 0;
@@ -768,6 +801,9 @@ impl App {
         self.layout = None;
         let Some(d) = self.devices.get(self.current) else {
             self.show_offline_layout();
+            #[cfg(windows)]
+            let _ = self.attach_listener(ctx, 0, 0);
+            #[cfg(not(windows))]
             if was_listening {
                 show_window(ctx);
             }
@@ -817,9 +853,20 @@ impl App {
         {
             return Err("Deixe conectado um único aparelho deste modelo.".into());
         }
+        self.attach_listener(ctx, d.vid, d.pid)
+    }
+
+    fn attach_listener(&mut self, ctx: &egui::Context, vid: u16, pid: u16) -> Result<(), String> {
+        #[cfg(windows)]
+        if let Some(listener) = &mut self.listener {
+            for event in listener.set_target(vid, pid) {
+                self.handle_tray_event(ctx, event);
+            }
+            return Ok(());
+        }
         let wake = ctx.clone();
         let hwnd = self.hwnd;
-        self.listener = Some(Listener::start_with_wake(d.vid, d.pid, move || {
+        self.listener = Some(Listener::start_with_wake(vid, pid, move || {
             if let Some(hwnd) = hwnd {
                 platform::wake_gui(hwnd);
             }
@@ -1063,16 +1110,17 @@ impl App {
         let restoring = op == Confirm::Restore;
         let host = self.profile().map_or(0, |p| p.host);
         let allowed = ((1u16 << keys.len()) - 1) as u8;
-        if restoring && host & !allowed != 0 {
+        if host & !allowed != 0 {
             return Err("Leiaute incompatível com as teclas do perfil.".into());
         }
         let mut cfg = self.gesture_draft;
         let targets = if restoring {
-            host
+            0
         } else {
             gesture_targets(cfg, allowed)?
         };
-        let missing = missing_individual_actions(self.profile().unwrap(), &keys, targets);
+        let changed = host | targets;
+        let missing = missing_individual_actions(self.profile().unwrap(), &keys, changed);
         if !missing.is_empty() {
             let names = missing
                 .into_iter()
@@ -1093,25 +1141,26 @@ impl App {
             }
         }
         self.engine.reset();
-        if !restoring && targets != 0 && self.listener.is_none() {
+        if changed != 0 {
             self.listen(ctx)?;
         }
-        let id = if targets != 0 {
+        let id = if changed != 0 {
             Some(self.probe_target(&d)?)
         } else {
             None
         };
         for (i, slot) in keys.into_iter().enumerate() {
             let bit = 1 << i;
-            if targets & bit == 0 {
+            if changed & bit == 0 {
                 continue;
             }
-            let binding = if restoring {
+            let direct = targets & bit == 0;
+            let binding = if direct {
                 self.profile().unwrap().bindings[&address(1, slot)].clone()
             } else {
                 Binding::Keyboard(vec![(0, 104 + i as u8)])
             };
-            let delay = if restoring {
+            let delay = if direct {
                 self.profile()
                     .unwrap()
                     .delays
@@ -1129,7 +1178,7 @@ impl App {
                 delay,
                 &binding,
             )?;
-            if !restoring {
+            if !direct {
                 let previous = self.profile().unwrap().host;
                 self.profile_mut().host |= bit;
                 if let Err(e) = self.persist() {
@@ -1138,9 +1187,12 @@ impl App {
                 }
             }
             device::send(&d, &reports)?;
-            if restoring {
+            if direct {
                 self.profile_mut().host &= !bit;
-                self.persist()?;
+                if let Err(error) = self.persist() {
+                    self.profile_mut().host |= bit;
+                    return Err(error);
+                }
             }
         }
         if restoring {
@@ -1462,17 +1514,26 @@ impl App {
                     self.scan(ctx);
                     return;
                 }
-                InputEvent::ShowWindow => show_window(ctx),
-                InputEvent::Quit => {
-                    self.exiting = true;
-                    self.engine.reset();
-                    ctx.send_viewport_cmd(egui::ViewportCommand::Visible(true));
-                    ctx.send_viewport_cmd(egui::ViewportCommand::Close);
+                event @ (InputEvent::ShowWindow | InputEvent::Quit) => {
+                    self.handle_tray_event(ctx, event)
                 }
             }
         }
         if let Some(action) = self.engine.tick(Instant::now(), &cfg) {
             self.handle(ctx, action);
+        }
+    }
+
+    fn handle_tray_event(&mut self, ctx: &egui::Context, event: InputEvent) {
+        self.hide_startup_at = None;
+        self.start_minimized = false;
+        if matches!(event, InputEvent::Quit) {
+            self.exiting = true;
+            self.engine.reset();
+            ctx.send_viewport_cmd(egui::ViewportCommand::Visible(true));
+            ctx.send_viewport_cmd(egui::ViewportCommand::Close);
+        } else {
+            show_window(ctx);
         }
     }
 }
@@ -1493,7 +1554,17 @@ impl eframe::App for App {
             ctx.send_viewport_cmd(egui::ViewportCommand::Minimized(true));
             if self.listener.as_ref().is_some_and(Listener::tray_available) {
                 // eframe displays the root window after the first paint.
-                self.hide_startup_at = Some(Instant::now() + Duration::from_millis(150));
+                let delay = Duration::from_millis(150);
+                self.hide_startup_at = Some(Instant::now() + delay);
+                #[cfg(windows)]
+                if let Some(hwnd) = self.hwnd {
+                    let ctx = ctx.clone();
+                    std::thread::spawn(move || {
+                        std::thread::sleep(delay);
+                        platform::wake_gui(hwnd);
+                        ctx.request_repaint();
+                    });
+                }
             }
         }
         if let Some(deadline) = self.hide_startup_at {
@@ -1591,7 +1662,18 @@ fn main() -> eframe::Result {
         }
         return Ok(());
     }
-    let start_minimized = std::env::args().any(|argument| argument == "--bandeja");
+    let args: Vec<_> = std::env::args().collect();
+    let forced_tray = args.iter().any(|argument| argument == "--bandeja");
+    #[cfg(windows)]
+    let marker = device::settings_dir().join("inicio-bandeja.v1");
+    #[cfg(windows)]
+    let start_minimized = !args.iter().any(|argument| argument == "--abrir")
+        && (forced_tray
+            || marker.is_file()
+            || location().is_file()
+            || device::settings_dir().join("idioma.txt").is_file());
+    #[cfg(not(windows))]
+    let start_minimized = forced_tray;
     let _instance = if std::env::var_os("MINI_TECLADO_CONFIG").is_none() {
         match platform::claim_instance() {
             Ok(Some(guard)) => Some(guard),
@@ -1629,7 +1711,16 @@ fn main() -> eframe::Result {
     eframe::run_native(
         APP_TITLE,
         options,
-        Box::new(|cc| Ok(Box::new(App::new(cc, &logo, start_minimized)))),
+        Box::new(|cc| {
+            let app = App::new(cc, &logo, start_minimized);
+            #[cfg(windows)]
+            let app = {
+                let mut app = app;
+                app.initialize_windows_startup(&marker);
+                app
+            };
+            Ok(Box::new(app))
+        }),
     )
 }
 

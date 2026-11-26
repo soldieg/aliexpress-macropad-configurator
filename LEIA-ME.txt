@@ -1,4 +1,4 @@
-Macro para Mini Teclados 0.7.1 — Windows x64
+Macro para Mini Teclados 0.8.0-alpha.2 — Windows x64
 
 Extraia a pasta e abra Macro-para-Mini-Teclados.exe. Identificar USB
 mostra o modelo, o ID USB, a interface, o protocolo
@@ -52,13 +52,15 @@ corresponde a um único controle cadastrado. Saídas ambíguas aparecem em
 Última entrada.
 
 Entradas e bandeja
-Marque Iniciar com o Windows na bandeja na barra de leiautes para abrir
-automaticamente ao entrar no Windows. Sem o aparelho conectado, a janela
-inicia minimizada. Ative a opção a partir da pasta onde o aplicativo ficará.
+A primeira abertura exibe a janela de configuração. Após o primeiro uso,
+o aplicativo abre na bandeja, inclusive com o aparelho desconectado.
+Use Abrir no ícone da bandeja para mostrar a janela. A opção Iniciar com o
+Windows na bandeja vem marcada e pode ser desativada na barra de layouts.
+Deixe o executável na pasta onde pretende mantê-lo.
 Última entrada mostra a última tecla ou comando recebido do aparelho.
 As teclas configuradas para combinações também afundam no mapa quando
 pressionadas. O botão X oculta a janela na bandeja quando a escuta está
-ativa. Pelo ícone da bandeja, Abrir volta à janela e Sair encerra a escuta.
+ativa. Pelo ícone da bandeja, Abrir volta à janela e Sair encerra o aplicativo.
 As ações do Windows continuam enquanto o aplicativo roda na bandeja.
 A contagem aparece em uma janela pequena própria com Cancelar, mesmo
 quando a janela principal estiver oculta.
@@ -84,6 +86,9 @@ A ação individual de cada controle reservado continua disponível se ela
 tiver sido cadastrada no editor. Edite-as em Teclado com Salvar ação individual. Os sinais dos gestos permanecem no aparelho. Se outro configurador regravar as teclas, Aplicar e enviar repõe os sinais. Quando um gesto é reconhecido, ele tem
 prioridade. Se for necessário recuperar o modo direto, cadastre primeiro
 as ações individuais desejadas e use Restaurar modo direto.
+O modo direto grava mídia, teclado e mouse no firmware. As teclas
+reprogramadas para combinações precisam do aplicativo na bandeja.
+Desativar e aplicar as combinações também restaura as ações individuais.
 
 Iluminação
 O perfil de três teclas e um giratório oferece Desligado, Modo 1 e Modo 2.

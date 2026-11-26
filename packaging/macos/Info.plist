@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleIdentifier</key>
+    <string>io.github.soldieg.macropad-configurator</string>
+    <key>CFBundleName</key>
+    <string>Macro para Mini Teclados</string>
+    <key>CFBundleExecutable</key>
+    <string>mini-teclado-usb</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleIconFile</key>
+    <string>MacroPad</string>
+    <key>CFBundleVersion</key>
+    <string>0.8.0</string>
+    <key>CFBundleShortVersionString</key>
+    <string>0.8.0</string>
+    <key>NSHighResolutionCapable</key>
+    <true/>
+    <key>NSAppleEventsUsageDescription</key>
+    <string>Solicita ao macOS o desligamento escolhido no mini teclado.</string>
+</dict>
+</plist>

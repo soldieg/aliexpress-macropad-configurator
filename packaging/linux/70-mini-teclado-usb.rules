@@ -1,0 +1,15 @@
+# Give the active local session access to supported keypad HID report nodes.
+# Install this file as /etc/udev/rules.d/70-mini-teclado-usb.rules.
+SUBSYSTEM=="hidraw", KERNEL=="hidraw*", ATTRS{idVendor}=="1189", ATTRS{idProduct}=="8810", TAG+="uaccess"
+SUBSYSTEM=="hidraw", KERNEL=="hidraw*", ATTRS{idVendor}=="1189", ATTRS{idProduct}=="8830", TAG+="uaccess"
+SUBSYSTEM=="hidraw", KERNEL=="hidraw*", ATTRS{idVendor}=="1189", ATTRS{idProduct}=="8831", TAG+="uaccess"
+SUBSYSTEM=="hidraw", KERNEL=="hidraw*", ATTRS{idVendor}=="1189", ATTRS{idProduct}=="8832", TAG+="uaccess"
+SUBSYSTEM=="hidraw", KERNEL=="hidraw*", ATTRS{idVendor}=="1189", ATTRS{idProduct}=="8833", TAG+="uaccess"
+SUBSYSTEM=="hidraw", KERNEL=="hidraw*", ATTRS{idVendor}=="1189", ATTRS{idProduct}=="8840", TAG+="uaccess"
+SUBSYSTEM=="hidraw", KERNEL=="hidraw*", ATTRS{idVendor}=="1189", ATTRS{idProduct}=="8890", TAG+="uaccess"
+SUBSYSTEM=="hidraw", KERNEL=="hidraw*", ATTRS{idVendor}=="6d7b", ATTRS{idProduct}=="dcfa", TAG+="uaccess"
+SUBSYSTEM=="input", KERNEL=="event*", ATTRS{idVendor}=="1189", ATTRS{idProduct}=="8810", TAG+="uaccess"
+SUBSYSTEM=="input", KERNEL=="event*", ATTRS{idVendor}=="1189", ATTRS{idProduct}=="883[0-3]", TAG+="uaccess"
+SUBSYSTEM=="input", KERNEL=="event*", ATTRS{idVendor}=="1189", ATTRS{idProduct}=="8890", TAG+="uaccess"
+SUBSYSTEM=="input", KERNEL=="event*", ATTRS{idVendor}=="1189", ATTRS{idProduct}=="8840", TAG+="uaccess"
+SUBSYSTEM=="input", KERNEL=="event*", ATTRS{idVendor}=="6d7b", ATTRS{idProduct}=="dcfa", TAG+="uaccess"

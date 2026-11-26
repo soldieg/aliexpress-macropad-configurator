@@ -1,16 +1,38 @@
-# Linux e macOS
+# Prévia para Linux e macOS
 
-A interface e boa parte do código de configuração podem ser reaproveitadas. Esta versão entrega um executável para Windows. As colunas abaixo descrevem caminhos de implementação e validação para os outros sistemas.
+O configurador usa a mesma interface Rust/egui nas três plataformas. Layouts, editor, animações, iluminação conforme o aparelho, atalhos da janela e 16 opções de idioma são compartilhados. Os pacotes desta branch são experimentais.
 
 | Recurso | Linux | macOS |
 | --- | --- | --- |
-| Interface, layouts, traduções e lógica dos gestos | Reaproveitar o código Rust/egui e habilitar Wayland e X11. Adaptar fontes, tema inicial e idioma do sistema. | Reaproveitar o código Rust/egui. Usar as fontes e preferências do macOS. |
-| Detecção e gravação USB | Usar HIDAPI/hidraw e regras udev restritas às interfaces verificadas. Usar o número da interface USB, sem depender do formato do caminho Windows. | Usar HIDAPI/IOKit e validar o relatório, a interface e as permissões. O Knurl confirma a viabilidade para parte das famílias. |
-| Ações e combinações globais | Capturar entrada por dispositivo via evdev. A reprodução em Wayland depende do compositor e das permissões do portal ou de uinput. | Usar IOHIDManager por aparelho e Controle de Entrada. A reprodução de eventos usa APIs Quartz e pode exigir Acessibilidade. |
-| Volume exato e indicador | PipeWire/WirePlumber ou backend equivalente, com indicador próprio. No GNOME, o passo dos comandos nativos também pode ser definido globalmente. | Usar Core Audio quando a saída expõe volume ajustável, com indicador próprio. A saída digital pode não expor esse controle. |
-| Tela, desligamento e cancelamento | X11 permite DPMS. O controle da tela em Wayland varia por compositor. O desligamento passa por logind e respeita autorizações e inibidores. | Usar a integração de energia do sistema e lidar com confirmação, permissões e aplicativos que podem interromper o desligamento. |
-| Bandeja e início automático | Validar StatusNotifier e o ambiente de desktop. Início de sessão por XDG Autostart. | Usar NSStatusItem e SMAppService, com empacotamento, assinatura e teste em máquina real. |
+| Configuração USB | HIDAPI por hidraw, com identificação pelo número de interface. | HIDAPI por IOKit, com identificação pelo número de interface. |
+| Captura e ações em segundo plano | evdev do mini teclado selecionado. Para repetir ações individuais de teclas que participam de combinações, o app usa uinput. | IOHIDManager observa o mini teclado selecionado. Quartz reproduz teclado e mouse. O Core Audio reproduz volume e mudo quando a saída aceita esses controles. |
+| Volume e rolagem | Passo ajustável de 1 a 10 pontos percentuais via PipeWire/WirePlumber e indicador do app. Rolagem e mídia em modo direto usam os comandos gravados no firmware. | Passo ajustável de 1 a 10 pontos percentuais via Core Audio e indicador do app. Rolagem e mídia em modo direto usam os comandos gravados no firmware. |
+| Tela, desligamento e cancelamento | X11/DPMS, KDE Wayland via `kscreen-doctor` ou Wayland com protocolo compatível com `wlopm`. O pedido de desligamento usa systemd. | Repouso de tela via `pmset` e despertar via IOKit. Após a contagem, o macOS recebe um pedido para abrir a confirmação nativa de desligamento. |
+| Bandeja e início de sessão | Menu StatusNotifier em ambientes que o oferecem. Início de sessão via XDG Autostart. | Menu na barra de menus e início de sessão por LaunchAgent do usuário. |
 
-O port pode preservar a mesma tela do configurador. A paridade das ações globais exige testes por ambiente e os modelos Legacy, Extended, FD e WebHub precisam validar a escrita em cada sistema.
+## Linux x86-64
 
-Referências primárias [HIDAPI](https://github.com/libusb/hidapi) · [Linux hidraw](https://www.kernel.org/doc/html/latest/hid/hidraw.html) · [Portal RemoteDesktop](https://flatpak.github.io/xdg-desktop-portal/docs/doc-org.freedesktop.portal.RemoteDesktop.html) · [WirePlumber wpctl](https://pipewire.pages.freedesktop.org/wireplumber/man/wpctl.html) · [GNOME media keys](https://github.com/GNOME/gnome-settings-daemon/blob/main/data/org.gnome.settings-daemon.plugins.media-keys.gschema.xml.in) · [systemd-logind](https://www.freedesktop.org/software/systemd/man/latest/org.freedesktop.login1.html) · [Knurl para macOS](https://github.com/dozzenn/knurl) · [IOHIDManager da Apple](https://developer.apple.com/documentation/iokit/1438367-iohidmanagerregisterinputvalueca) · [Core Audio da Apple](https://developer.apple.com/documentation/audiotoolbox/kaudiohardwareservicedeviceproperty_virtualmainvolume).
+Extraia o pacote e mantenha o executável em um caminho permanente se for ativar o início automático. A compilação do pacote usa Ubuntu 24.04. No X11, instale `libxkbcommon-x11-0` se a biblioteca estiver ausente. Para permitir acesso ao dispositivo pela sessão atual, instale a regra incluída. Ela se restringe aos VID/PID listados no arquivo.
+
+```sh
+sudo install -m 0644 70-mini-teclado-usb.rules /etc/udev/rules.d/
+sudo udevadm control --reload-rules
+```
+
+Reconecte o mini teclado. Execute `./mini-teclado-usb --diagnostico` para conferir a identificação e o acesso ao relatório USB. O volume por passo do aplicativo usa `wpctl`. A reprodução de ações conciliadas com combinações exige permissão de gravação em `/dev/uinput`, administrada pela distribuição ou pelo responsável pela máquina.
+
+## macOS Apple Silicon e Intel
+
+Escolha o ZIP correspondente ao processador. Extraia e mova o app para Aplicativos antes de autorizar ou habilitar o início de sessão. O pacote de prévia tem assinatura ad hoc. A distribuição por Developer ID e a notarização estão pendentes.
+
+Para as combinações, conceda **Monitoramento de Entrada** ao app. A reprodução de teclado e mouse requer **Acessibilidade**. O pedido de desligamento pode exigir autorização em **Automação**. Para diagnóstico em Terminal, execute o binário dentro de `Contents/MacOS` com `--diagnostico`.
+
+## O que falta validar
+
+- Teste com o USB físico `1189:8890` em cada sistema. Teste identificação, gravação e restauração de uma ação, rolagem, passos do dial, combos, reabertura da tela e cancelamento da contagem. Use a simulação no primeiro teste.
+- Confirme a bandeja, início automático, pop-up em segundo plano e ativação do volume nas saídas de áudio e sessões gráficas pretendidas. O indicador do aplicativo acompanha o passo gerenciado.
+- No macOS, anterior, próximo e reprodução/pausa continuam disponíveis para gravação direta no firmware. A repetição dessas ações pelo aplicativo, para uma tecla compartilhada por uma combinação, está pendente. O aplicativo recusa ativar essa associação antes de substituir a ação gravada.
+- A interface FD do `1189:8840` ainda precisa de um transporte validado no Linux e no macOS. Extended e WebHub também precisam de validação física nessas plataformas.
+- O firmware Legacy transmite o volume de mídia usando o passo do sistema com o aplicativo fechado. O passo exato e as combinações que comandam o sistema exigem que o processo fique rodando. Ao trocar de sistema, restaure modo direto no perfil de origem se o perfil de destino ainda não tiver as ações individuais salvas.
+
+Referências [HIDAPI](https://github.com/libusb/hidapi) · [Linux hidraw](https://www.kernel.org/doc/html/latest/hid/hidraw.html) · [Linux uinput](https://www.kernel.org/doc/html/latest/input/uinput.html) · [WirePlumber wpctl](https://pipewire.pages.freedesktop.org/wireplumber/man/wpctl.html) · [IOHIDManager](https://developer.apple.com/documentation/iokit/1438367-iohidmanagerregisterinputvalueca) · [Core Audio](https://developer.apple.com/documentation/coreaudio).

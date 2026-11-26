@@ -1,13 +1,29 @@
-#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+#![cfg_attr(all(windows, not(debug_assertions)), windows_subsystem = "windows")]
 
+#[cfg_attr(target_os = "linux", path = "linux_audio.rs")]
+#[cfg_attr(target_os = "macos", path = "macos_audio.rs")]
 mod audio;
+#[cfg(windows)]
 mod countdown_window;
 mod custom;
+#[cfg(not(windows))]
+mod desktop_tray;
+#[cfg(not(windows))]
+mod desktop_windows;
 mod device;
 mod gestures;
 mod i18n;
+mod input;
+#[cfg(target_os = "linux")]
+mod linux;
+#[cfg(target_os = "macos")]
+mod macos;
+#[cfg(not(windows))]
+use desktop_windows::{countdown_window, volume_osd};
+#[cfg_attr(not(windows), path = "desktop.rs")]
 mod platform;
 mod ui;
+#[cfg(windows)]
 mod volume_osd;
 
 use device::{Binding, ControlKind, Device, Layout};
@@ -987,6 +1003,10 @@ impl App {
             return Ok("Ação de volume enviada. O passo é compartilhado pelos giros.".into());
         }
         let managed = self.manages_binding(self.layer, self.slot);
+        #[cfg(not(windows))]
+        if managed {
+            platform::validate_replay(&binding)?;
+        }
         if !managed {
             let conflict = self.profile().is_some_and(|p| {
                 p.volume_managed
@@ -1062,6 +1082,15 @@ impl App {
             return Err(format!(
                 "Salve as ações individuais em Teclado antes de continuar. Faltam {names}."
             ));
+        }
+        #[cfg(not(windows))]
+        if !restoring {
+            for (index, &slot) in keys.iter().enumerate() {
+                if targets & (1 << index) != 0 {
+                    platform::validate_replay(&self.profile().unwrap().bindings[&address(1, slot)])
+                        .map_err(|error| format!("{}: {error}", ui::slot_name(slot)))?;
+                }
+            }
         }
         self.engine.reset();
         if !restoring && targets != 0 && self.listener.is_none() {
@@ -1403,7 +1432,7 @@ impl App {
                                     self.last_input = Some(format!(
                                         "{} · {} {level}%",
                                         ui::slot_name(slot),
-                                        i18n::tr("Volume do Windows")
+                                        i18n::system_text("Volume do Windows")
                                     ));
                                     log_marker_event(format_args!(
                                         "volume {step:+} → {level}% ({slot})"
@@ -1456,13 +1485,13 @@ fn show_window(ctx: &egui::Context) {
 
 impl eframe::App for App {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+        #[cfg(not(windows))]
+        if platform::take_show_request() {
+            show_window(ctx);
+        }
         if std::mem::take(&mut self.start_minimized) {
             ctx.send_viewport_cmd(egui::ViewportCommand::Minimized(true));
-            if self
-                .listener
-                .as_ref()
-                .is_some_and(|listener| listener.tray_available)
-            {
+            if self.listener.as_ref().is_some_and(Listener::tray_available) {
                 // eframe displays the root window after the first paint.
                 self.hide_startup_at = Some(Instant::now() + Duration::from_millis(150));
             }
@@ -1471,11 +1500,7 @@ impl eframe::App for App {
             let now = Instant::now();
             if now >= deadline {
                 self.hide_startup_at = None;
-                if self
-                    .listener
-                    .as_ref()
-                    .is_some_and(|listener| listener.tray_available)
-                {
+                if self.listener.as_ref().is_some_and(Listener::tray_available) {
                     ctx.send_viewport_cmd(egui::ViewportCommand::Visible(false));
                 }
             } else {
@@ -1483,10 +1508,7 @@ impl eframe::App for App {
             }
         }
         if ctx.input(|i| i.viewport().close_requested()) {
-            if !self.exiting
-                && self.hwnd.is_some()
-                && self.listener.as_ref().is_some_and(|l| l.tray_available)
-            {
+            if !self.exiting && self.listener.as_ref().is_some_and(Listener::tray_available) {
                 ctx.send_viewport_cmd(egui::ViewportCommand::CancelClose);
                 ctx.send_viewport_cmd(egui::ViewportCommand::Visible(false));
             } else {
@@ -1527,6 +1549,13 @@ impl eframe::App for App {
             self.status = "Demonstração concluída. O computador continua ligado.".into();
         }
         self.update_countdown(ctx);
+        #[cfg(not(windows))]
+        {
+            if let Some(window) = &mut self.countdown {
+                window.render(ctx);
+            }
+            self.volume_osd.render(ctx);
+        }
         ctx.request_repaint_after(self.next_scan.saturating_duration_since(now));
         self.keyboard_shortcuts(ctx);
         self.render(ctx);

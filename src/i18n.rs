@@ -187,6 +187,12 @@ pub fn tr(text: &str) -> &str {
     translation(text, language)
 }
 
+#[cfg(not(windows))]
+pub fn tr_native(text: &str) -> &str {
+    // AppKit and StatusNotifier menu hosts process bidi and Arabic shaping themselves.
+    translation(text, ACTIVE.load(Ordering::Relaxed))
+}
+
 pub fn model(name: &str) -> &str {
     match name {
         "3 teclas e 1 botão giratório" => tr("3 teclas + 1 giratório"),

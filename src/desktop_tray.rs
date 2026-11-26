@@ -1,4 +1,4 @@
-use crate::{i18n::tr, input::InputEvent};
+use crate::{i18n::tr_native as tr, input::InputEvent};
 use std::sync::{mpsc::Sender, Arc};
 
 const LOGO: &[u8] = include_bytes!("../assets/logo.png");
@@ -170,7 +170,7 @@ mod native {
     static HANDLER: Once = Once::new();
     static TARGETS: Mutex<Vec<MenuTarget>> = Mutex::new(Vec::new());
 
-    fn dispatch_menu(event: MenuEvent) {
+    fn dispatch_menu(event: &MenuEvent) -> bool {
         let selected = TARGETS.lock().ok().and_then(|targets| {
             targets.iter().find_map(|target| {
                 let action = if event.id == target.open {
@@ -185,6 +185,9 @@ mod native {
         });
         if let Some((dispatch, action)) = selected {
             dispatch.emit(action);
+            true
+        } else {
+            false
         }
     }
 
@@ -233,7 +236,14 @@ mod native {
             .map_err(|error| format!("Não foi possível criar o ícone da bandeja. {error}"))?;
 
         HANDLER.call_once(|| {
-            MenuEvent::set_event_handler(Some(Arc::new(dispatch_menu)));
+            let previous = MenuEvent::set_event_handler(None);
+            let _ = MenuEvent::set_event_handler(Some(Arc::new(move |event| {
+                if !dispatch_menu(&event) {
+                    if let Some(handler) = &previous {
+                        handler(event);
+                    }
+                }
+            })));
         });
         TARGETS
             .lock()
@@ -265,8 +275,11 @@ mod tests {
         dispatch.emit(InputEvent::ShowWindow);
         assert_eq!(receiver.recv().unwrap(), InputEvent::ShowWindow);
         assert_eq!(wakes.load(std::sync::atomic::Ordering::Relaxed), 1);
+        dispatch.emit(InputEvent::Quit);
+        assert_eq!(receiver.recv().unwrap(), InputEvent::Quit);
+        assert_eq!(wakes.load(std::sync::atomic::Ordering::Relaxed), 2);
         drop(receiver);
         dispatch.emit(InputEvent::Quit);
-        assert_eq!(wakes.load(std::sync::atomic::Ordering::Relaxed), 1);
+        assert_eq!(wakes.load(std::sync::atomic::Ordering::Relaxed), 2);
     }
 }

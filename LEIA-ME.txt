@@ -1,0 +1,132 @@
+Macro para Mini Teclados 0.7.0 — Windows x64
+
+Extraia a pasta e abra Macro-para-Mini-Teclados.exe. Identificar USB
+mostra o modelo, o ID USB, a interface, o protocolo
+conhecido e, quando há indícios, um possível leiaute para aparelhos
+desconhecidos. Um leiaute sugerido serve como referência visual. A escrita
+USB exige um perfil de protocolo conhecido.
+O seletor ao lado de Identificar USB segue o idioma de exibição do Windows
+ou permite fixar um idioma. Português do Brasil é usado quando nenhum dos
+idiomas de interface disponíveis corresponde à preferência do Windows.
+
+Teclado
+No modelo de três teclas e um giratório, clique na parte correspondente do
+logo. Os três botões numerados e o centro vermelho afundam ao clicar. As
+setas selecionam os giros. Em Ação, a aba Teclado permite gravar ou editar
+sequências. As ações de Mídia e Mouse aparecem como botões. Use Aplicar ação
+selecionada para enviar essa ação. O editor usa o histórico do perfil local
+para preencher a tela. Atalhos gravados por outros aplicativos precisam ser
+cadastrados manualmente para permitir sua restauração.
+Ctrl+S aplica a ação da aba ativa. Combinações mantém a confirmação de envio.
+Alt+1 abre Teclado, Alt+2 Combinações, Alt+3 Iluminação e Alt+4 Identificar USB.
+Para o giratório do 1189:8890, selecione o giro e escolha Rolar para cima
+ou Rolar para baixo em Mouse. Ajuste de 1 a 10 passos por clique.
+O teste físico mediu -120 e +1200 no Windows. As ações anteriores de
+volume foram restauradas ao fim do teste.
+Em Ação → Mídia, atribua Aumentar volume ou Diminuir volume aos giros.
+Em Volume do giratório, Direto no teclado grava os comandos nativos.
+Eles funcionam com o aplicativo fechado, usando o passo do Windows.
+Passo do aplicativo usa um valor compartilhado de 1 a 10 pontos percentuais
+por giro, com padrão 2. O programa pode ficar na bandeja. Após ativar esse
+modo, mudar o valor afeta todos os giros de volume sem nova gravação USB.
+O indicador do aplicativo mostra a porcentagem na tela, mesmo na bandeja.
+Com o aplicativo totalmente encerrado, Direto no teclado usa o passo do
+sistema. O comando HID de volume da família Legacy não inclui um
+percentual para gravar como ajuste exato no firmware.
+
+Layouts
+O seletor tem Padrão, Layout 2 e Layout 3. Use o modelo do aparelho ou
+comece com 3 teclas e 1 giratório, 9 teclas e 2 giratórios, ou 12 teclas
+e 2 giratórios. Arraste os controles na grade, ajuste o tamanho e adicione
+ou remova teclas e giratórios. Adicione giratórios enquanto houver
+espaço na grade. A troca de desenho preserva as ações e combinações.
+A variante 1189:8890 de quatro teclas continua no perfil de hardware.
+O menu ... permite ocultar e restaurar o layout Padrão quando você tem
+outro salvo. Use Excluir layout para remover um layout personalizado.
+Todos usam o mesmo desenho em relevo. O mapa anima uma entrada física
+quando ela identifica um controle: sinais do app ou uma ação direta que
+corresponde a um único controle cadastrado. Saídas ambíguas aparecem em
+Última entrada.
+
+Entradas e bandeja
+Marque Iniciar com o Windows na bandeja na barra de leiautes para abrir
+automaticamente ao entrar no Windows. Sem o aparelho conectado, a janela
+inicia minimizada. Ative a opção a partir da pasta onde o aplicativo ficará.
+Última entrada mostra a última tecla ou comando recebido do aparelho.
+As teclas configuradas para combinações também afundam no mapa quando
+pressionadas. O botão X oculta a janela na bandeja quando a escuta está
+ativa. Pelo ícone da bandeja, Abrir volta à janela e Sair encerra a escuta.
+As ações do Windows continuam enquanto o aplicativo roda na bandeja.
+A contagem aparece em uma janela pequena própria com Cancelar, mesmo
+quando a janela principal estiver oculta.
+
+Combinações
+1. Salve as ações individuais das teclas participantes na aba Teclado. Em seguida, escolha até quatro entradas por gesto e marque Ativar combinações.
+2. Clique em Aplicar e enviar e confirme. O aparelho recebe F13–F16 nos
+   controles envolvidos. O aplicativo na bandeja interpreta esses sinais.
+3. Teste os gestos com Modo de teste marcado. Para executar ações reais,
+   desmarque Modo de teste e use Aplicar e enviar de novo. Para desligar o PC de verdade, marque também Permitir desligamento real do PC.
+4. Ligar / apagar a tela alterna o pedido de energia a cada gesto.
+   Desligar computador abre uma contagem de cinco segundos. Cancele pelo
+   gesto escolhido ou pelo botão. A primeira contagem acionada pelo teclado
+   é sempre um teste. Ao concluir ou cancelar, o programa informa se o
+   próximo gesto pode desligar de verdade. Para isso, o modo real ainda
+   exige permissão explícita e uma contagem completa.
+
+O firmware do 1189:8890 grava uma ação por controle, inclusive um atalho
+com modificadores e uma sequência de teclas. Reconhecer vários botões
+físicos apertados juntos e executar ações do Windows exige a bandeja.
+
+A ação individual de cada controle reservado continua disponível se ela
+tiver sido cadastrada no editor. Edite-as em Teclado com Salvar ação individual. Os sinais dos gestos permanecem no aparelho. Se outro configurador regravar as teclas, Aplicar e enviar repõe os sinais. Quando um gesto é reconhecido, ele tem
+prioridade. Se for necessário recuperar o modo direto, cadastre primeiro
+as ações individuais desejadas e use Restaurar modo direto.
+
+Iluminação
+O perfil de três teclas e um giratório oferece Desligado, Modo 1 e Modo 2.
+O 1189:8890 não informa por leitura o modo atual nem oferece cor livre pelo
+protocolo documentado. No WebHub 6D7B:DCFA, a roda escolhe a cor do aparelho.
+Também há brilho, velocidade, efeitos, paleta e leitura da configuração.
+O botão Aplicar iluminação aguarda a confirmação e relê o valor enviado.
+
+Outros aparelhos
+O WebHub 6D7B:DCFA (MI_02, FF00) permite ler e gravar ações compatíveis.
+A variante de seis teclas e um giratório 1189:8840 (MI_00, FF00) usa
+o protocolo FD, com gravação de teclado e rolagem unitária. O Extended
+em MI_01 continua disponível na variante original. Os dois perfis novos
+foram verificados por testes de protocolo, sem unidades físicas no teste.
+O diagnóstico identifica outras coleções HID e sugere leiautes quando há
+informação suficiente. É necessário um perfil compatível para gravar.
+
+Validação
+O 1189:8890 ajustou o volume de 30% para 31% com um giro à direita
+e voltou a 30% com um giro à esquerda. O teste usou passo de 1 e
+restaurou as ações anteriores. O 1189:8890 foi identificado no canal MI_01. As três teclas registraram
+eventos simultâneos no Windows. O gesto 1 + 2 + 3 abriu a contagem e a tecla
+2 cancelou em modo de teste. O gesto 1 + 3 foi confirmado no monitor,
+apagando e ligando a tela. O fluxo real de desligamento usa o comando do
+Windows. As verificações simularam o desligamento e mantiveram o PC ligado.
+
+Arquivos locais e código
+O perfil fica em %APPDATA%\MiniTecladoUSB\perfis.json. O diretório também
+aceita config.txt e layouts.txt do RSoft. A variável MINI_TECLADO_CONFIG
+permite usar um perfil em outro diretório.
+
+O projeto Rust está em fonte. Para compilar com Rust MSVC no Windows,
+execute cargo build --locked --release nesse diretório.
+
+Base do RSoft MacroPad, commit c51d4d39bc94ec4c0cdfc6a2b8203551a852dca5.
+https://github.com/rOzzy1987/MacroPad/tree/c51d4d39bc94ec4c0cdfc6a2b8203551a852dca5
+
+Ideias aproveitadas dos pull requests
+#40 · Contraste, cartões e estados visuais de seleção e conexão.
+#44 · Organização dos painéis quando a janela fica pequena.
+#28 · Entrada manual de teclas e cuidado com o mapeamento do mouse.
+#26 · Variante de quatro teclas sem giratório como opção de leiaute.
+Os PRs #39 e #46 têm evidência para outras variantes. As funções adicionais
+de RGB desses PRs não foram atribuídas ao modelo de três teclas.
+A integração WebHub usa como referência o fork ysalitrynskyi/MacroPad,
+commit 5e6f8f03, com crédito ao projeto dozzenn/knurl. O protocolo FD vem
+do fork coldmon91/MacroPad2, commit 3a3e31e2.
+
+A licença GPL-3.0 integral acompanha o código.

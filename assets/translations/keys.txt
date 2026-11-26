@@ -1,0 +1,166 @@
+Idioma
+Idioma do Windows
+Português (Brasil)
+Macro para Mini Teclados
+Identificar USB
+Teclado
+Combinações
+Iluminação
+USB desconectado
+Padrão
+Leiaute 2
+Leiaute 3
+Criar
+Editar leiaute
+Ocultar leiaute padrão
+Mostrar leiaute padrão
+Iniciar com o Windows na bandeja
+Controles
+Ação
+Mídia
+Mouse
+Ler ações do aparelho
+Gravar teclas
+Adicionar passo
+Limpar
+Passo
+Camada
+Intervalo
+Aplicar ação selecionada
+Salvar ação individual
+Reproduzir / pausar
+Próxima faixa
+Faixa anterior
+Silenciar
+Aumentar volume
+Diminuir volume
+Clique esquerdo
+Clique direito
+Clique central
+Rolar para cima
+Rolar para baixo
+Passos de rolagem por clique
+Volume do giratório
+Direto no teclado
+Passo do aplicativo
+Passo por giro
+Conferir volume
+Ativar combinações
+Modo de teste
+Permitir desligamento real do PC
+Ligar / apagar a tela
+Desligar computador em 5 segundos
+Cancelar desligamento
+Demonstrar contagem de 5 segundos
+Enviar ao tecladinho
+Aplicar e enviar
+Aplicado · modo de teste
+Aplicado · ações reais
+Pausar combinações
+Iniciar escuta
+Restaurar modo direto
+Desligado
+Modo
+Automática
+Vermelho
+Laranja
+Amarelo
+Verde
+Ciano
+Azul
+Roxo
+Aplicar iluminação
+Ler iluminação do aparelho
+Fixa
+Respiração
+Ao pressionar
+Onda
+Paleta animada
+Matiz
+Saturação
+Brilho
+Velocidade
+Última entrada
+Aguardando o tecladinho
+Nenhum tecladinho conectado
+Configuração do aparelho
+Confirmar envio
+Restaurar
+Voltar
+Editor de leiaute
+3 teclas + 1 giratório
+9 teclas + 2 giratórios
+12 teclas + 2 giratórios
++ Tecla
++ Giratório
+Remover selecionado
+Salvar leiaute
+Cancelar
+Tamanho
+Esquerda e direita
+Só esquerda
+Só direita
+Sem giro
+Pressionar
+Tecla
+Giratório
+Girar à esquerda
+Girar à direita
+Apertar
+Aparelho
+Abrir
+Sair
+Fechar
+Buscar novamente
+Copiar identificação
+Leiaute
+Possível leiaute
+Perfil de configuração reconhecido.
+Protocolo de gravação ainda desconhecido.
+Simulação de desligamento
+Desligamento do computador
+Tecladinho ou botão
+Arraste os controles. A grade mantém as posições alinhadas.
+Clique em um controle para editar a ação.
+O modelo e os controles aparecem quando você conecta o USB.
+A busca lista interfaces HID USB e indica quais têm perfil de configuração.
+Aplicar as combinações e enviar os sinais ao tecladinho?
+Gravar de volta as ações individuais que você cadastrou no perfil?
+As ações individuais salvas continuam disponíveis ao pressionar uma tecla sozinha.
+O primeiro gesto de desligar sempre roda um teste de cinco segundos. Termine ou cancele para liberar o modo real.
+Escolha de uma a quatro teclas por ação. Limpar desativa esse gesto.
+O aparelho envia os sinais das teclas. O aplicativo executa as combinações no Windows.
+O mesmo passo vale para todos os giros configurados como volume. O aplicativo pode ficar na bandeja.
+O volume direto usa o passo do Windows e funciona com o aplicativo fechado. Ative Passo do aplicativo para usar o valor acima.
+Ação individual em modo combinado. Salvar aqui mantém os sinais das combinações.
+O perfil não informa modos de LED.
+Este modelo oferece modos de iluminação. A escolha manual de cor depende do firmware e não está disponível no perfil reconhecido.
+Na entrada do Windows, inicia na bandeja ou minimizado até o teclado conectar.
+Leiaute personalizado salvo.
+Tecladinho conectado. Entradas monitoradas.
+Conecte um Mini Teclado USB compatível.
+Dispositivo desconectado.
+Ação enviada. Teste no tecladinho.
+Desligamento cancelado.
+Teste inicial cancelado.
+Teste inicial concluído.
+O próximo gesto pode desligar o computador.
+O gesto poderá desligar quando você aplicar o modo real e permitir o desligamento.
+Primeiro teste de desligamento. Você pode deixar terminar ou cancelar.
+Contagem iniciada. O gesto de cancelar está disponível.
+Teste concluído. O computador continua ligado.
+Entradas pressionadas
+nenhuma
+Inicialização automática ativada.
+Inicialização automática desativada.
+Erro
+Volume do Windows
+Espaço insuficiente para esse tamanho.
+Selecione ao menos uma ação para este giratório.
+Dispositivo reconhecido.
+Escolha gestos diferentes para apagar a tela e desligar.
+Use Aplicar e enviar para registrar os novos controles.
+Mídia direta indisponível no protocolo FD.
+No aparelho, os modificadores podem valer apenas no primeiro passo.
+Aumentar
+Diminuir

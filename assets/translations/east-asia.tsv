@@ -1,0 +1,166 @@
+1	语言	言語	Язык	Sprache
+2	Windows 语言	Windows の言語	Язык Windows	Windows-Sprache
+3	巴西葡萄牙语	ポルトガル語（ブラジル）	Португальский (Бразилия)	Portugiesisch (Brasilien)
+4	迷你键盘宏工具	ミニキーボード用マクロ	Макросы для мини-клавиатур	Makros für Mini-Tastaturen
+5	识别 USB 设备	USB 機器を識別	Определить USB-устройство	USB-Gerät erkennen
+6	键盘	キーボード	Клавиатура	Tastatur
+7	组合键	キーの組み合わせ	Комбинации	Tastenkombinationen
+8	灯光	ライティング	Подсветка	Beleuchtung
+9	USB 已断开	USB 切断	USB отключён	USB getrennt
+10	默认	標準	По умолчанию	Standard
+11	布局 2	レイアウト 2	Раскладка 2	Layout 2
+12	布局 3	レイアウト 3	Раскладка 3	Layout 3
+13	新建	作成	Создать	Erstellen
+14	编辑布局	レイアウトを編集	Изменить раскладку	Layout bearbeiten
+15	隐藏默认布局	標準レイアウトを非表示	Скрыть стандартную раскладку	Standardlayout ausblenden
+16	显示默认布局	標準レイアウトを表示	Показать стандартную раскладку	Standardlayout anzeigen
+17	随 Windows 启动到系统托盘	Windows 起動時に通知領域で開始	Запускать вместе с Windows в системном трее	Mit Windows im Infobereich starten
+18	控件	操作部	Элементы управления	Bedienelemente
+19	操作	操作	Действие	Aktion
+20	媒体	メディア	Мультимедиа	Medien
+21	鼠标	マウス	Мышь	Maus
+22	读取设备上的操作	機器から操作を読み取る	Считать действия с устройства	Aktionen vom Gerät lesen
+23	录制按键	キー入力を記録	Записать нажатия	Tasten aufzeichnen
+24	添加步骤	ステップを追加	Добавить шаг	Schritt hinzufügen
+25	清除	クリア	Очистить	Leeren
+26	步骤	ステップ	Шаг	Schritt
+27	层	レイヤー	Слой	Ebene
+28	间隔	間隔	Интервал	Intervall
+29	应用所选操作	選択した操作を適用	Применить выбранное действие	Gewählte Aktion anwenden
+30	保存单键操作	単独キーの操作を保存	Сохранить одиночное действие	Einzelaktion speichern
+31	播放 / 暂停	再生 / 一時停止	Воспроизведение / пауза	Wiedergabe / Pause
+32	下一曲	次のトラック	Следующий трек	Nächster Titel
+33	上一曲	前のトラック	Предыдущий трек	Vorheriger Titel
+34	静音	ミュート	Отключить звук	Stummschalten
+35	提高音量	音量を上げる	Увеличить громкость	Lauter
+36	降低音量	音量を下げる	Уменьшить громкость	Leiser
+37	左键单击	左クリック	Щелчок левой кнопкой	Linksklick
+38	右键单击	右クリック	Щелчок правой кнопкой	Rechtsklick
+39	中键单击	中クリック	Щелчок средней кнопкой	Mittelklick
+40	向上滚动	上にスクロール	Прокрутить вверх	Nach oben scrollen
+41	向下滚动	下にスクロール	Прокрутить вниз	Nach unten scrollen
+42	每次触发的滚动步数	1 回の操作あたりのスクロール量	Шагов прокрутки за нажатие	Scrollschritte pro Klick
+43	旋钮音量	ノブの音量	Громкость с регулятора	Drehregler-Lautstärke
+44	由键盘直接执行	キーボードから直接	Напрямую с клавиатуры	Direkt über die Tastatur
+45	应用步长	アプリで指定した変化量	Шаг приложения	Schrittweite der App
+46	每格步长	1 目盛りあたりの変化量	Шаг за деление регулятора	Schrittweite pro Rastung
+47	检查音量	音量を確認	Проверить громкость	Lautstärke prüfen
+48	启用组合键	組み合わせを有効にする	Включить комбинации	Tastenkombinationen aktivieren
+49	测试模式	テストモード	Тестовый режим	Testmodus
+50	允许电脑实际关机	PC の実際のシャットダウンを許可	Разрешить выключение компьютера	Tatsächliches Herunterfahren erlauben
+51	开启 / 关闭屏幕	画面をオン / オフ	Включить / выключить экран	Bildschirm ein- / ausschalten
+52	5 秒后关闭电脑	5 秒後に PC をシャットダウン	Выключить компьютер через 5 секунд	Computer in 5 Sekunden herunterfahren
+53	取消关机	シャットダウンを取り消す	Отменить выключение	Herunterfahren abbrechen
+54	演示 5 秒倒计时	5 秒のカウントダウンを試す	Проверить отсчёт в 5 секунд	5-Sekunden-Countdown testen
+55	发送到迷你键盘	ミニキーボードに送信	Отправить на мини-клавиатуру	An Mini-Tastatur senden
+56	应用并发送	適用して送信	Применить и отправить	Anwenden und senden
+57	已应用 · 测试模式	適用済み · テストモード	Применено · тестовый режим	Angewendet · Testmodus
+58	已应用 · 实际操作	適用済み · 実際に実行	Применено · реальные действия	Angewendet · Aktive Systemaktionen
+59	暂停组合键	組み合わせを一時停止	Приостановить комбинации	Tastenkombinationen pausieren
+60	开始监听	入力の監視を開始	Начать отслеживание	Überwachung starten
+61	恢复直接模式	直接実行モードに戻す	Восстановить прямой режим	Direktmodus wiederherstellen
+62	关闭	オフ	Выкл.	Aus
+63	模式	モード	Режим	Modus
+64	自动	自動	Автоматически	Automatisch
+65	红色	赤	Красный	Rot
+66	橙色	オレンジ	Оранжевый	Orange
+67	黄色	黄	Жёлтый	Gelb
+68	绿色	緑	Зелёный	Grün
+69	青色	シアン	Голубой	Cyan
+70	蓝色	青	Синий	Blau
+71	紫色	紫	Фиолетовый	Violett
+72	应用灯光设置	ライティングを適用	Применить подсветку	Beleuchtung anwenden
+73	读取设备灯光设置	機器からライティングを読み取る	Считать подсветку с устройства	Beleuchtung vom Gerät lesen
+74	常亮	点灯	Постоянная	Dauerlicht
+75	呼吸	ブリージング	Пульсация	Pulsieren
+76	按下时亮	押したときに点灯	При нажатии	Beim Drücken
+77	波浪	ウェーブ	Волна	Welle
+78	动态配色	アニメーション配色	Смена цветов	Farbwechsel
+79	色相	色相	Оттенок	Farbton
+80	饱和度	彩度	Насыщенность	Sättigung
+81	亮度	明るさ	Яркость	Helligkeit
+82	速度	速度	Скорость	Geschwindigkeit
+83	最近一次输入	最後の入力	Последний ввод	Letzte Eingabe
+84	正在等待迷你键盘	ミニキーボードの接続待ち	Ожидание мини-клавиатуры	Warte auf Mini-Tastatur
+85	未连接迷你键盘	ミニキーボードが接続されていません	Мини-клавиатура не подключена	Keine Mini-Tastatur verbunden
+86	设备设置	機器設定	Настройка устройства	Geräteeinstellungen
+87	确认发送	送信を確認	Подтвердить отправку	Senden bestätigen
+88	恢复	復元	Восстановить	Wiederherstellen
+89	返回	戻る	Назад	Zurück
+90	布局编辑器	レイアウトエディター	Редактор раскладки	Layout-Editor
+91	3 个按键 + 1 个旋钮	3 キー + 1 ノブ	3 клавиши + 1 регулятор	3 Tasten + 1 Drehregler
+92	9 个按键 + 2 个旋钮	9 キー + 2 ノブ	9 клавиш + 2 регулятора	9 Tasten + 2 Drehregler
+93	12 个按键 + 2 个旋钮	12 キー + 2 ノブ	12 клавиш + 2 регулятора	12 Tasten + 2 Drehregler
+94	+ 按键	+ キー	+ Клавиша	+ Taste
+95	+ 旋钮	+ ノブ	+ Регулятор	+ Drehregler
+96	移除所选控件	選択した操作部を削除	Удалить выбранный элемент	Auswahl entfernen
+97	保存布局	レイアウトを保存	Сохранить раскладку	Layout speichern
+98	取消	キャンセル	Отмена	Abbrechen
+99	大小	サイズ	Размер	Größe
+100	左右双向	左右両方向	Влево и вправо	Links und rechts
+101	仅向左	左のみ	Только влево	Nur links
+102	仅向右	右のみ	Только вправо	Nur rechts
+103	不可转动	回転なし	Без вращения	Ohne Drehung
+104	按下	押す	Нажатие	Drücken
+105	按键	キー	Клавиша	Taste
+106	旋钮	ノブ	Регулятор	Drehregler
+107	向左转动	左に回す	Повернуть влево	Nach links drehen
+108	向右转动	右に回す	Повернуть вправо	Nach rechts drehen
+109	按压旋钮	ノブを押し込む	Нажать на регулятор	Drehregler drücken
+110	设备	機器	Устройство	Gerät
+111	打开	開く	Открыть	Öffnen
+112	退出	終了	Выйти	Beenden
+113	关闭	閉じる	Закрыть	Schließen
+114	重新搜索	再検索	Повторить поиск	Erneut suchen
+115	复制设备标识	識別情報をコピー	Копировать идентификатор	Kennung kopieren
+116	布局	レイアウト	Раскладка	Layout
+117	可能的布局	推定レイアウト	Предполагаемая раскладка	Mögliches Layout
+118	已识别配置档案。	設定プロファイルを認識しました。	Профиль настройки распознан.	Konfigurationsprofil erkannt.
+119	写入协议尚不明确。	書き込みプロトコルは不明です。	Протокол записи пока неизвестен.	Schreibprotokoll noch unbekannt.
+120	关机模拟	シャットダウンのシミュレーション	Симуляция выключения	Herunterfahren simulieren
+121	关闭电脑	PC のシャットダウン	Выключение компьютера	Computer herunterfahren
+122	迷你键盘或按键	ミニキーボードまたはボタン	Мини-клавиатура или кнопка	Mini-Tastatur oder Taste
+123	拖动控件。网格会自动对齐位置。	操作部をドラッグします。位置はグリッドに沿ってそろいます。	Перетащите элементы. Сетка выровняет их положение.	Bedienelemente ziehen. Das Raster richtet sie aus.
+124	点击控件即可编辑其操作。	操作部をクリックすると、割り当てた操作を編集できます。	Щёлкните по элементу, чтобы изменить его действие.	Auf ein Bedienelement klicken, um seine Aktion zu bearbeiten.
+125	连接 USB 后会显示型号和控件。	USB を接続すると、機種と操作部が表示されます。	Модель и элементы управления появятся при подключении по USB.	Modell und Bedienelemente erscheinen nach dem USB-Anschluss.
+126	搜索列出 USB HID 接口，并标记哪些接口有配置档案。	検索では USB HID インターフェースを一覧表示し、設定プロファイルがあるものを示します。	Поиск показывает интерфейсы USB HID и отмечает те, для которых есть профиль настройки.	Die Suche zeigt USB-HID-Schnittstellen und kennzeichnet die mit einem Konfigurationsprofil.
+127	应用组合键并向迷你键盘发送信号？	組み合わせを適用して、ミニキーボードに信号を送信しますか？	Применить комбинации и отправить сигналы на мини-клавиатуру?	Tastenkombinationen anwenden und Signale an die Mini-Tastatur senden?
+128	将档案中的单键操作重新写入设备？	プロファイルに登録した単独キーの操作を機器に書き戻しますか？	Записать обратно на устройство одиночные действия из профиля?	Die im Profil gespeicherten Einzelaktionen wieder auf das Gerät schreiben?
+129	单独按下一个键时，仍可执行已保存的单键操作。	キーを単独で押すと、保存済みの個別操作を実行できます。	Сохранённые одиночные действия доступны при нажатии одной клавиши.	Gespeicherte Einzelaktionen bleiben beim alleinigen Drücken einer Taste verfügbar.
+130	首次触发关机总会进行 5 秒测试。等待测试结束或取消，即可解锁实际关机模式。	最初のシャットダウン操作では必ず 5 秒間のテストを行います。完了を待つか取り消すと、実際に実行できるようになります。	Первый жест выключения всегда запускает пятисекундный тест. Дождитесь завершения или отмените его, чтобы разрешить реальный режим.	Die erste Geste zum Herunterfahren startet stets einen 5-Sekunden-Test. Der Echtbetrieb wird nach Abschluss oder Abbruch freigegeben.
+131	每个操作可选择 1 至 4 个键。“清除”将停用此组合键。	操作ごとに 1～4 個のキーを選びます。「クリア」で無効にできます。	Выберите от одной до четырёх клавиш для действия. Кнопка «Очистить» отключает этот жест.	Pro Aktion eine bis vier Tasten wählen. „Leeren“ deaktiviert die jeweilige Kombination.
+132	设备发送按键信号。应用在 Windows 中执行组合键操作。	機器がキー信号を送信し、アプリが Windows 上で組み合わせを実行します。	Устройство посылает сигналы клавиш. Приложение выполняет комбинации в Windows.	Das Gerät sendet Tastensignale. Die App führt die Kombinationen in Windows aus.
+133	所有用于控制音量的旋钮方向都使用同一步长。应用可留在系统托盘中。	音量に割り当てたすべての回転操作に同じ変化量を使います。アプリは通知領域に置いたまま使えます。	Один шаг действует для всех поворотов, назначенных регулировке громкости. Приложение может оставаться в трее.	Dieselbe Schrittweite gilt für alle Drehbewegungen mit Lautstärkezuweisung. Die App kann im Infobereich bleiben.
+134	直接控制音量时使用 Windows 的步长，应用关闭后也可用。启用“应用步长”即可使用上面的值。	直接操作では Windows の音量変化量が使われ、アプリを閉じても動作します。上の値を使うには「アプリで指定した変化量」を有効にしてください。	Прямая регулировка использует шаг Windows и работает при закрытом приложении. Включите «Шаг приложения», чтобы использовать значение выше.	Direkte Lautstärkeänderungen nutzen die Windows-Schrittweite und funktionieren bei geschlossener App. „Schrittweite der App“ aktiviert den Wert oben.
+135	组合模式下的单键操作。在此保存会保留组合键所需的信号。	組み合わせモードの個別操作です。ここで保存しても、組み合わせに使う信号は維持されます。	Одиночное действие в режиме комбинаций. Сохранение здесь оставляет сигналы комбинаций без изменений.	Einzelaktion im Kombinationsmodus. Beim Speichern bleiben die Signale für Kombinationen erhalten.
+136	此配置档案未提供 LED 模式信息。	このプロファイルに LED モードの情報がありません。	В профиле нет сведений о режимах подсветки.	Im Profil sind keine LED-Modi hinterlegt.
+137	此型号支持灯光模式。手动选色取决于固件，当前识别的配置档案不提供该功能。	この機種にはライティングモードがあります。手動での色選択はファームウェアによって異なり、認識されたプロファイルでは利用できません。	Эта модель поддерживает режимы подсветки. Ручной выбор цвета зависит от прошивки и недоступен в распознанном профиле.	Dieses Modell bietet Beleuchtungsmodi. Die manuelle Farbwahl hängt von der Firmware ab und ist im erkannten Profil nicht verfügbar.
+138	登录 Windows 时，应用会在系统托盘中启动，或在键盘连接前保持最小化。	Windows へのサインイン時に通知領域で起動するか、キーボードが接続されるまで最小化した状態で起動します。	При входе в Windows приложение запускается в трее или в свёрнутом виде до подключения клавиатуры.	Bei der Windows-Anmeldung startet die App im Infobereich oder bleibt bis zum Anschluss der Tastatur minimiert.
+139	自定义布局已保存。	カスタムレイアウトを保存しました。	Пользовательская раскладка сохранена.	Benutzerdefiniertes Layout gespeichert.
+140	迷你键盘已连接。正在监测输入。	ミニキーボードを接続しました。入力を監視しています。	Мини-клавиатура подключена. Ввод отслеживается.	Mini-Tastatur verbunden. Eingaben werden überwacht.
+141	请连接兼容的 USB 迷你键盘。	対応する USB ミニキーボードを接続してください。	Подключите совместимую мини-клавиатуру USB.	Eine kompatible USB-Mini-Tastatur anschließen.
+142	设备已断开连接。	機器が切断されました。	Устройство отключено.	Gerät getrennt.
+143	操作已发送。请在迷你键盘上测试。	操作を送信しました。ミニキーボードで試してください。	Действие отправлено. Проверьте его на мини-клавиатуре.	Aktion gesendet. Auf der Mini-Tastatur testen.
+144	已取消关机。	シャットダウンを取り消しました。	Выключение отменено.	Herunterfahren abgebrochen.
+145	已取消首次测试。	初回テストを取り消しました。	Первый тест отменён.	Erster Test abgebrochen.
+146	首次测试已完成。	初回テストが完了しました。	Первый тест завершён.	Erster Test abgeschlossen.
+147	下一次触发可能会关闭电脑。	次の操作で PC がシャットダウンする可能性があります。	Следующий жест может выключить компьютер.	Die nächste Geste kann den Computer herunterfahren.
+148	应用实际模式并允许关机后，此操作便可关闭电脑。	実行モードを適用してシャットダウンを許可すると、この操作で PC をシャットダウンできます。	Жест сможет выключать компьютер после применения реального режима и разрешения выключения.	Die Geste kann den Computer herunterfahren, sobald der Echtbetrieb angewendet und das Herunterfahren erlaubt ist.
+149	首次关机测试。可以等待测试结束，也可以取消。	最初のシャットダウンテストです。完了を待つか、取り消してください。	Первый тест выключения. Можно дождаться завершения или отменить его.	Erster Test zum Herunterfahren. Ablauf abwarten oder abbrechen.
+150	倒计时已开始。可用取消组合键中止关机。	カウントダウンが始まりました。取り消しの操作が使えます。	Отсчёт начался. Доступен жест отмены.	Der Countdown läuft. Die Abbruchkombination ist verfügbar.
+151	测试已完成。电脑仍处于开机状态。	テストが完了しました。PC は起動したままです。	Тест завершён. Компьютер остаётся включённым.	Test abgeschlossen. Der Computer bleibt eingeschaltet.
+152	已按下的控件	押されている操作部	Нажатые элементы	Gedrückte Bedienelemente
+153	无	なし	нет	keine
+154	已启用自动启动。	自動起動を有効にしました。	Автозапуск включён.	Autostart aktiviert.
+155	已停用自动启动。	自動起動を無効にしました。	Автозапуск отключён.	Autostart deaktiviert.
+156	错误	エラー	Ошибка	Fehler
+157	Windows 音量	Windows の音量	Громкость Windows	Windows-Lautstärke
+158	空间不足，无法使用此大小。	このサイズに必要なスペースがありません。	Для этого размера недостаточно места.	Nicht genug Platz für diese Größe.
+159	请为此旋钮至少选择一个操作。	このノブには少なくとも 1 つの操作を選んでください。	Выберите хотя бы одно действие для этого регулятора.	Mindestens eine Aktion für diesen Drehregler wählen.
+160	已识别设备。	機器を認識しました。	Устройство распознано.	Gerät erkannt.
+161	请为关闭屏幕和关闭电脑选择不同的组合键。	画面を消す操作とシャットダウンには、異なる組み合わせを選んでください。	Для выключения экрана и компьютера выберите разные жесты.	Für das Ausschalten des Bildschirms und das Herunterfahren unterschiedliche Gesten wählen.
+162	使用“应用并发送”注册新增控件。	「適用して送信」で新しい操作部を登録します。	Используйте «Применить и отправить», чтобы зарегистрировать новые элементы.	Mit „Anwenden und senden“ die neuen Bedienelemente registrieren.
+163	FD 协议不支持直接媒体控制。	FD プロトコルでは直接メディア操作を利用できません。	Прямое управление мультимедиа недоступно в протоколе FD.	Direkte Mediensteuerung ist im FD-Protokoll nicht verfügbar.
+164	在设备上，修饰键可能只对第一步生效。	機器によっては修飾キーが最初のステップのみに適用されます。	На устройстве модификаторы могут действовать только на первом шаге.	Auf dem Gerät wirken Modifikatortasten möglicherweise nur im ersten Schritt.
+165	增加	増やす	Увеличить	Erhöhen
+166	减少	減らす	Уменьшить	Verringern

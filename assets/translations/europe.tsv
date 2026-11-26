@@ -1,0 +1,166 @@
+1	Language	Idioma	Langue
+2	Windows language	Idioma de Windows	Langue de Windows
+3	Brazilian Portuguese	Portugués de Brasil	Portugais du Brésil
+4	Macro for Mini Keyboards	Macros para miniteclados	Macros pour mini-claviers
+5	Identify USB	Identificar USB	Identifier l’USB
+6	Keyboard	Teclado	Clavier
+7	Combinations	Combinaciones	Combinaisons
+8	Lighting	Iluminación	Éclairage
+9	USB disconnected	USB desconectado	USB déconnecté
+10	Default	Predeterminado	Par défaut
+11	Layout 2	Diseño 2	Disposition 2
+12	Layout 3	Diseño 3	Disposition 3
+13	Create	Crear	Créer
+14	Edit layout	Editar diseño	Modifier la disposition
+15	Hide default layout	Ocultar diseño predeterminado	Masquer la disposition par défaut
+16	Show default layout	Mostrar diseño predeterminado	Afficher la disposition par défaut
+17	Start with Windows in the tray	Iniciar con Windows en la bandeja	Démarrer avec Windows dans la zone de notification
+18	Controls	Controles	Commandes
+19	Action	Acción	Action
+20	Media	Multimedia	Multimédia
+21	Mouse	Ratón	Souris
+22	Read device actions	Leer acciones del dispositivo	Lire les actions de l’appareil
+23	Record keys	Grabar teclas	Enregistrer les touches
+24	Add step	Añadir paso	Ajouter une étape
+25	Clear	Borrar	Effacer
+26	Step	Paso	Étape
+27	Layer	Capa	Couche
+28	Interval	Intervalo	Intervalle
+29	Apply selected action	Aplicar acción seleccionada	Appliquer l’action sélectionnée
+30	Save individual action	Guardar acción individual	Enregistrer l’action individuelle
+31	Play / pause	Reproducir / pausar	Lecture / pause
+32	Next track	Pista siguiente	Piste suivante
+33	Previous track	Pista anterior	Piste précédente
+34	Mute	Silenciar	Couper le son
+35	Volume up	Subir volumen	Augmenter le volume
+36	Volume down	Bajar volumen	Diminuer le volume
+37	Left click	Clic izquierdo	Clic gauche
+38	Right click	Clic derecho	Clic droit
+39	Middle click	Clic central	Clic du milieu
+40	Scroll up	Desplazar hacia arriba	Défiler vers le haut
+41	Scroll down	Desplazar hacia abajo	Défiler vers le bas
+42	Scroll steps per click	Pasos de desplazamiento por clic	Pas de défilement par cran
+43	Knob volume	Volumen del dial	Volume de la molette
+44	On the keyboard	Directo en el teclado	Directement sur le clavier
+45	App volume step	Paso de la aplicación	Pas de volume de l’application
+46	Step per detent	Paso por giro	Pas par cran
+47	Check volume	Consultar volumen	Vérifier le volume
+48	Enable combinations	Activar combinaciones	Activer les combinaisons
+49	Test mode	Modo de prueba	Mode test
+50	Allow actual PC shutdown	Permitir apagar el PC realmente	Autoriser l’arrêt réel du PC
+51	Turn the screen on / off	Encender / apagar la pantalla	Allumer / éteindre l’écran
+52	Shut down in 5 seconds	Apagar el equipo en 5 segundos	Arrêter l’ordinateur dans 5 secondes
+53	Cancel shutdown	Cancelar apagado	Annuler l’arrêt
+54	Preview the 5-second countdown	Probar la cuenta atrás de 5 segundos	Essayer le compte à rebours de 5 secondes
+55	Send to the keyboard	Enviar al teclado	Envoyer au clavier
+56	Apply and send	Aplicar y enviar	Appliquer et envoyer
+57	Applied · test mode	Aplicado · modo de prueba	Appliqué · mode test
+58	Applied · live actions	Aplicado · acciones reales	Appliqué · actions réelles
+59	Pause combinations	Pausar combinaciones	Suspendre les combinaisons
+60	Start listening	Iniciar escucha	Démarrer l’écoute
+61	Restore direct mode	Restaurar modo directo	Rétablir le mode direct
+62	Off	Apagado	Éteint
+63	Mode	Modo	Mode
+64	Automatic	Automático	Automatique
+65	Red	Rojo	Rouge
+66	Orange	Naranja	Orange
+67	Yellow	Amarillo	Jaune
+68	Green	Verde	Vert
+69	Cyan	Cian	Cyan
+70	Blue	Azul	Bleu
+71	Purple	Morado	Violet
+72	Apply lighting	Aplicar iluminación	Appliquer l’éclairage
+73	Read device lighting	Leer la iluminación del dispositivo	Lire l’éclairage de l’appareil
+74	Solid	Fija	Fixe
+75	Breathing	Respiración	Pulsation
+76	On press	Al pulsar	À la pression
+77	Wave	Onda	Vague
+78	Animated palette	Paleta animada	Palette animée
+79	Hue	Tono	Teinte
+80	Saturation	Saturación	Saturation
+81	Brightness	Brillo	Luminosité
+82	Speed	Velocidad	Vitesse
+83	Last input	Última entrada	Dernière entrée
+84	Waiting for the mini keyboard	Esperando al miniteclado	En attente du mini-clavier
+85	No mini keyboard connected	Ningún miniteclado conectado	Aucun mini-clavier connecté
+86	Device configuration	Configuración del dispositivo	Configuration de l’appareil
+87	Confirm send	Confirmar envío	Confirmer l’envoi
+88	Restore	Restaurar	Rétablir
+89	Back	Volver	Retour
+90	Layout editor	Editor de diseño	Éditeur de disposition
+91	3 keys + 1 knob	3 teclas + 1 dial	3 touches + 1 molette
+92	9 keys + 2 knobs	9 teclas + 2 diales	9 touches + 2 molettes
+93	12 keys + 2 knobs	12 teclas + 2 diales	12 touches + 2 molettes
+94	+ Key	+ Tecla	+ Touche
+95	+ Knob	+ Dial	+ Molette
+96	Remove selected	Eliminar selección	Supprimer la sélection
+97	Save layout	Guardar diseño	Enregistrer la disposition
+98	Cancel	Cancelar	Annuler
+99	Size	Tamaño	Taille
+100	Left and right	Izquierda y derecha	Gauche et droite
+101	Left only	Solo izquierda	Gauche uniquement
+102	Right only	Solo derecha	Droite uniquement
+103	No rotation	Sin giro	Sans rotation
+104	Press	Pulsar	Appuyer
+105	Key	Tecla	Touche
+106	Knob	Dial	Molette
+107	Turn left	Girar a la izquierda	Tourner à gauche
+108	Turn right	Girar a la derecha	Tourner à droite
+109	Press	Pulsar	Appuyer
+110	Device	Dispositivo	Appareil
+111	Open	Abrir	Ouvrir
+112	Quit	Salir	Quitter
+113	Close	Cerrar	Fermer
+114	Rescan	Buscar de nuevo	Rechercher à nouveau
+115	Copy identification	Copiar identificación	Copier l’identification
+116	Layout	Diseño	Disposition
+117	Possible layout	Diseño posible	Disposition possible
+118	Configuration profile recognized.	Perfil de configuración reconocido.	Profil de configuration reconnu.
+119	Write protocol is still unknown.	Protocolo de escritura aún desconocido.	Protocole d’écriture encore inconnu.
+120	Shutdown simulation	Simulación de apagado	Simulation d’arrêt
+121	Computer shutdown	Apagado del equipo	Arrêt de l’ordinateur
+122	Mini keyboard or button	Miniteclado o botón	Mini-clavier ou bouton
+123	Drag the controls. The grid keeps them aligned.	Arrastra los controles. La cuadrícula los mantiene alineados.	Déplacez les commandes. La grille les aligne.
+124	Click a control to edit its action.	Haz clic en un control para editar su acción.	Cliquez sur une commande pour modifier son action.
+125	Connect the USB device to see its model and controls.	Conecta el dispositivo USB para ver el modelo y los controles.	Connectez l’appareil USB pour voir son modèle et ses commandes.
+126	The scan lists USB HID interfaces and shows which have a configuration profile.	La búsqueda muestra las interfaces USB HID y cuáles tienen un perfil de configuración.	La recherche affiche les interfaces USB HID et indique celles qui ont un profil de configuration.
+127	Apply the combinations and send the signals to the mini keyboard?	¿Aplicar las combinaciones y enviar las señales al miniteclado?	Appliquer les combinaisons et envoyer les signaux au mini-clavier ?
+128	Write the individual actions saved in the profile back to the keyboard?	¿Volver a grabar en el teclado las acciones individuales del perfil?	Réécrire sur le clavier les actions individuelles enregistrées dans le profil ?
+129	Saved individual actions still work when you press a single key.	Las acciones individuales guardadas siguen disponibles al pulsar una sola tecla.	Les actions individuelles enregistrées restent disponibles avec une seule touche.
+130	The first shutdown gesture runs a five-second test. Finish or cancel it to unlock live mode.	El primer gesto de apagado inicia una prueba de cinco segundos. Termínala o cancélala para habilitar el modo real.	Le premier geste d’arrêt lance un test de cinq secondes. Terminez-le ou annulez-le pour débloquer le mode réel.
+131	Choose one to four keys per action. Clear disables the gesture.	Elige de una a cuatro teclas por acción. Borrar desactiva el gesto.	Choisissez une à quatre touches par action. Effacer désactive le geste.
+132	The device sends key signals. The app runs the combinations in Windows.	El dispositivo envía las señales de las teclas. La aplicación ejecuta las combinaciones en Windows.	L’appareil envoie les signaux des touches. L’application exécute les combinaisons dans Windows.
+133	All volume turns use the same step. The app can stay in the tray.	Todos los giros de volumen usan el mismo paso. La aplicación puede quedarse en la bandeja.	Tous les crans de volume utilisent le même pas. L’application peut rester dans la zone de notification.
+134	Direct volume uses the Windows step and works with the app closed. Enable App volume step to use the value above.	El volumen directo usa el paso de Windows y funciona con la aplicación cerrada. Activa Paso de la aplicación para usar el valor anterior.	Le volume direct utilise le pas de Windows et fonctionne lorsque l’application est fermée. Activez le pas de l’application pour utiliser la valeur ci-dessus.
+135	Individual action in combination mode. Saving here preserves the combination signals.	Acción individual en modo combinado. Guardarla conserva las señales de las combinaciones.	Action individuelle en mode combiné. Enregistrer ici préserve les signaux des combinaisons.
+136	The profile lists no LED modes.	El perfil no indica modos LED.	Le profil n’indique aucun mode LED.
+137	This model has lighting modes. Manual colors depend on firmware and are unavailable in this profile.	Este modelo ofrece modos de iluminación. El color manual depende del firmware y no está disponible en este perfil.	Ce modèle propose des modes d’éclairage. Le choix manuel de la couleur dépend du micrologiciel et est indisponible dans ce profil.
+138	Starts in the tray at Windows sign-in, or stays minimized until the device connects.	Se inicia en la bandeja al entrar en Windows o queda minimizado hasta conectar el teclado.	Démarre dans la zone de notification à la connexion à Windows, ou reste réduit jusqu’à ce que l’appareil soit connecté.
+139	Custom layout saved.	Diseño personalizado guardado.	Disposition personnalisée enregistrée.
+140	Mini keyboard connected. Listening for input.	Miniteclado conectado. Escuchando las entradas.	Mini-clavier connecté. Écoute des entrées.
+141	Connect a compatible USB mini keyboard.	Conecta un miniteclado USB compatible.	Connectez un mini-clavier USB compatible.
+142	Device disconnected.	Dispositivo desconectado.	Appareil déconnecté.
+143	Action sent. Try it on the mini keyboard.	Acción enviada. Pruébala en el miniteclado.	Action envoyée. Essayez-la sur le mini-clavier.
+144	Shutdown canceled.	Apagado cancelado.	Arrêt annulé.
+145	Initial test canceled.	Prueba inicial cancelada.	Test initial annulé.
+146	Initial test completed.	Prueba inicial completada.	Test initial terminé.
+147	The next gesture can shut down the computer.	El próximo gesto puede apagar el equipo.	Le prochain geste peut arrêter l’ordinateur.
+148	The gesture can shut down the PC after you apply live mode and allow shutdown.	El gesto podrá apagar el equipo cuando apliques el modo real y permitas el apagado.	Le geste pourra arrêter le PC une fois le mode réel appliqué et l’arrêt autorisé.
+149	First shutdown test. Let it finish or cancel it.	Primera prueba de apagado. Deja que termine o cancélala.	Premier test d’arrêt. Laissez-le se terminer ou annulez-le.
+150	Countdown started. You can use the cancel gesture.	Cuenta atrás iniciada. Puedes usar el gesto de cancelación.	Compte à rebours lancé. Le geste d’annulation est disponible.
+151	Test completed. The computer remains on.	Prueba completada. El equipo sigue encendido.	Test terminé. L’ordinateur reste allumé.
+152	Pressed controls	Controles pulsados	Commandes enfoncées
+153	none	ninguno	aucune
+154	Automatic startup enabled.	Inicio automático activado.	Démarrage automatique activé.
+155	Automatic startup disabled.	Inicio automático desactivado.	Démarrage automatique désactivé.
+156	Error	Error	Erreur
+157	Windows volume	Volumen de Windows	Volume de Windows
+158	Not enough space for this size.	No hay espacio suficiente para ese tamaño.	Espace insuffisant pour cette taille.
+159	Select at least one action for this knob.	Selecciona al menos una acción para este dial.	Sélectionnez au moins une action pour cette molette.
+160	Device recognized.	Dispositivo reconocido.	Appareil reconnu.
+161	Choose different gestures for turning off the screen and shutting down.	Elige gestos distintos para apagar la pantalla y el equipo.	Choisissez des gestes différents pour éteindre l’écran et arrêter l’ordinateur.
+162	Use Apply and send to register the new controls.	Usa Aplicar y enviar para registrar los nuevos controles.	Utilisez Appliquer et envoyer pour enregistrer les nouvelles commandes.
+163	Direct media is unavailable on the FD protocol.	La multimedia directa no está disponible en el protocolo FD.	Le multimédia direct est indisponible avec le protocole FD.
+164	On the device, modifiers may apply only to the first step.	En el dispositivo, los modificadores pueden aplicarse solo al primer paso.	Sur l’appareil, les modificateurs peuvent ne s’appliquer qu’à la première étape.
+165	Increase	Subir	Augmenter
+166	Decrease	Bajar	Diminuer

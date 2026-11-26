@@ -1,0 +1,166 @@
+1	اللغة	اللغة	Bahasa	Language
+2	لغة ويندوز	لغة ويندوز	Bahasa Windows	Windows language
+3	البرتغالية (البرازيل)	برتغالي (البرازيل)	Portugis (Brasil)	Portuguese (Brazil)
+4	ماكرو للوحات المفاتيح الصغيرة	ماكرو للكيبوردات الصغيرة	Makro untuk Papan Ketik Mini	Macro for Mini Keyboards
+5	التعرّف على USB	عرّف USB	Identifikasi USB	Identify USB
+6	لوحة المفاتيح	الكيبورد	Papan ketik	Keyboard
+7	تركيبات المفاتيح	تركيبات الزراير	Kombinasi tombol	Button combinations
+8	الإضاءة	الإضاءة	Pencahayaan	Lighting
+9	USB غير متصل	الـUSB مش متوصل	USB terputus	USB no connect
+10	افتراضي	الافتراضي	Bawaan	Default
+11	التخطيط 2	التخطيط ٢	Tata letak 2	Layout 2
+12	التخطيط 3	التخطيط ٣	Tata letak 3	Layout 3
+13	إنشاء	اعمل جديد	Buat	Create
+14	تعديل التخطيط	عدّل التخطيط	Edit tata letak	Edit layout
+15	إخفاء التخطيط الافتراضي	خبّي التخطيط الافتراضي	Sembunyikan tata letak bawaan	Hide default layout
+16	إظهار التخطيط الافتراضي	اظهر التخطيط الافتراضي	Tampilkan tata letak bawaan	Show default layout
+17	التشغيل في منطقة الإعلام مع ويندوز	شغّل مع ويندوز في منطقة الإشعارات	Mulai bersama Windows di baki sistem	Start with Windows for tray
+18	عناصر التحكم	عناصر التحكّم	Kontrol	Controls
+19	الإجراء	الوظيفة	Tindakan	Action
+20	الوسائط	الميديا	Media	Media
+21	الفأرة	الماوس	Tetikus	Mouse
+22	قراءة إجراءات الجهاز	اقرا وظايف الجهاز	Baca tindakan dari perangkat	Read actions from device
+23	تسجيل المفاتيح	سجّل الزراير	Rekam tombol	Record keys
+24	إضافة خطوة	ضيف خطوة	Tambah langkah	Add step
+25	مسح	امسح	Bersihkan	Clear
+26	خطوة	خطوة	Langkah	Step
+27	طبقة	طبقة	Lapisan	Layer
+28	الفاصل الزمني	الوقت بين الخطوات	Jeda	Interval
+29	تطبيق الإجراء المحدد	طبّق الوظيفة المختارة	Terapkan tindakan terpilih	Apply selected action
+30	حفظ الإجراء الفردي	احفظ وظيفة الزر لوحده	Simpan tindakan tunggal	Save single-button action
+31	تشغيل / إيقاف مؤقت	شغّل / وقّف مؤقت	Putar / jeda	Play / pause
+32	المقطع التالي	المقطع اللي بعده	Trek berikutnya	Next track
+33	المقطع السابق	المقطع اللي فات	Trek sebelumnya	Previous track
+34	كتم الصوت	اكتم الصوت	Bisukan	Mute
+35	رفع الصوت	علّي الصوت	Naikkan volume	Turn volume up
+36	خفض الصوت	وطّي الصوت	Turunkan volume	Turn volume down
+37	نقرة يسار	دوسة شمال	Klik kiri	Left-click
+38	نقرة يمين	دوسة يمين	Klik kanan	Right-click
+39	نقرة وسطى	دوسة في النص	Klik tengah	Middle-click
+40	تمرير لأعلى	مرّر لفوق	Gulir ke atas	Scroll up
+41	تمرير لأسفل	مرّر لتحت	Gulir ke bawah	Scroll down
+42	خطوات التمرير لكل نقرة	خطوات التمرير لكل دوسة	Langkah gulir per klik	Scroll steps per click
+43	الصوت بالمقبض الدوّار	الصوت بالبكرة	Volume kenop putar	Dial volume
+44	مباشرةً من لوحة المفاتيح	مباشرة من الكيبورد	Langsung dari papan ketik	Direct from keyboard
+45	خطوة التطبيق	مقدار التغيير في التطبيق	Langkah aplikasi	App step
+46	الخطوة لكل تدوير	مقدار التغيير لكل لفة	Langkah per putaran	Step per turn
+47	التحقق من مستوى الصوت	اتأكّد من مستوى الصوت	Periksa volume	Check volume
+48	تفعيل التركيبات	شغّل تركيبات الزراير	Aktifkan kombinasi	Turn on combinations
+49	وضع الاختبار	وضع التجربة	Mode uji	Test mode
+50	السماح بإيقاف الكمبيوتر فعليًا	اسمح إن الكمبيوتر يطفي بجد	Izinkan pematian komputer sungguhan	Allow real PC shutdown
+51	تشغيل / إطفاء الشاشة	شغّل / اطفي الشاشة	Nyalakan / matikan layar	Turn screen on / off
+52	إيقاف الكمبيوتر بعد 5 ثوانٍ	اطفي الكمبيوتر بعد ٥ ثواني	Matikan komputer dalam 5 detik	Shut down PC in 5 seconds
+53	إلغاء الإيقاف	الغي إطفاء الكمبيوتر	Batalkan pematian	Cancel shutdown
+54	تجربة العدّ التنازلي لـ5 ثوانٍ	جرّب العدّ التنازلي لـ٥ ثواني	Uji hitung mundur 5 detik	Try 5-second countdown
+55	إرسال إلى اللوحة الصغيرة	ابعته للكيبورد الصغير	Kirim ke papan ketik mini	Send to mini keyboard
+56	تطبيق وإرسال	طبّق وابعت	Terapkan dan kirim	Apply and send
+57	طُبّق · وضع الاختبار	اتطبّق · وضع التجربة	Diterapkan · mode uji	Don apply · test mode
+58	طُبّق · إجراءات فعلية	اتطبّق · وظايف حقيقية	Diterapkan · tindakan nyata	Don apply · real actions
+59	تعليق التركيبات	وقّف التركيبات مؤقت	Jeda kombinasi	Pause combinations
+60	بدء الاستماع	ابتدي تتابع الزراير	Mulai pantau input	Start to listen
+61	استعادة الوضع المباشر	رجّع الوضع المباشر	Pulihkan mode langsung	Restore direct mode
+62	متوقف	مطفي	Mati	Off
+63	الوضع	الوضع	Mode	Mode
+64	تلقائية	تلقائي	Otomatis	Automatic
+65	أحمر	أحمر	Merah	Red
+66	برتقالي	برتقاني	Oranye	Orange
+67	أصفر	أصفر	Kuning	Yellow
+68	أخضر	أخضر	Hijau	Green
+69	سماوي	سماوي	Sian	Cyan
+70	أزرق	أزرق	Biru	Blue
+71	بنفسجي	موف	Ungu	Purple
+72	تطبيق الإضاءة	طبّق الإضاءة	Terapkan pencahayaan	Apply lighting
+73	قراءة إضاءة الجهاز	اقرا إضاءة الجهاز	Baca pencahayaan perangkat	Read lighting from device
+74	ثابتة	ثابتة	Tetap	Steady
+75	توهّج نابض	نور بيزيد ويقلّ	Berdenyut	Breathing
+76	عند الضغط	مع الدوس	Saat ditekan	When you press
+77	موجة	موجة	Gelombang	Wave
+78	لوحة ألوان متحركة	ألوان بتتغيّر	Palet animasi	Moving colour palette
+79	درجة اللون	درجة اللون	Rona	Hue
+80	التشبّع	تَشبّع اللون	Saturasi	Saturation
+81	السطوع	سطوع النور	Kecerahan	Brightness
+82	السرعة	السرعة	Kecepatan	Speed
+83	آخر إدخال	آخر إدخال	Input terakhir	Last input
+84	بانتظار اللوحة الصغيرة	مستني الكيبورد الصغير	Menunggu papan ketik mini	Dey wait for mini keyboard
+85	لا توجد لوحة صغيرة متصلة	مفيش كيبورد صغير متوصل	Tidak ada papan ketik mini terhubung	No mini keyboard connect
+86	إعدادات الجهاز	إعدادات الجهاز	Pengaturan perangkat	Device settings
+87	تأكيد الإرسال	أكّد الإرسال	Konfirmasi pengiriman	Confirm sending
+88	استعادة	رجّع	Pulihkan	Restore
+89	رجوع	ارجع	Kembali	Go back
+90	محرّر التخطيط	محرّر التخطيط	Editor tata letak	Layout editor
+91	3 مفاتيح + مقبض دوّار	٣ زراير + بكرة	3 tombol + 1 kenop	3 buttons + 1 dial
+92	9 مفاتيح + مقبضان دوّاران	٩ زراير + بكرتين	9 tombol + 2 kenop	9 buttons + 2 dials
+93	12 مفتاحًا + مقبضان دوّاران	١٢ زرار + بكرتين	12 tombol + 2 kenop	12 buttons + 2 dials
+94	+ مفتاح	+ زرار	+ Tombol	+ Button
+95	+ مقبض دوّار	+ بكرة	+ Kenop	+ Dial
+96	إزالة المحدد	شيل اللي اخترته	Hapus yang dipilih	Remove selected
+97	حفظ التخطيط	احفظ التخطيط	Simpan tata letak	Save layout
+98	إلغاء	إلغاء	Batal	Cancel
+99	الحجم	الحجم	Ukuran	Size
+100	يسار ويمين	شمال ويمين	Kiri dan kanan	Left and right
+101	يسار فقط	شمال بس	Kiri saja	Left only
+102	يمين فقط	يمين بس	Kanan saja	Right only
+103	بلا تدوير	من غير لف	Tanpa putaran	No turning
+104	ضغط	دوس	Tekan	Press
+105	مفتاح	زرار	Tombol	Button
+106	مقبض دوّار	بكرة	Kenop putar	Dial
+107	تدوير لليسار	لف شمال	Putar ke kiri	Turn left
+108	تدوير لليمين	لف يمين	Putar ke kanan	Turn right
+109	اضغط	دوس	Tekan	Press
+110	الجهاز	الجهاز	Perangkat	Device
+111	فتح	افتح	Buka	Open
+112	خروج	اخرج	Keluar	Exit
+113	إغلاق	اقفل	Tutup	Close
+114	البحث مجددًا	دوّر تاني	Cari lagi	Search again
+115	نسخ المعرّف	انسخ المعرّف	Salin identitas	Copy device ID
+116	التخطيط	التخطيط	Tata letak	Layout
+117	تخطيط محتمل	تخطيط محتمل	Kemungkinan tata letak	Possible layout
+118	تم التعرّف على ملف الإعداد.	اتعرّف على بروفايل الإعداد.	Profil konfigurasi dikenali.	App don recognise config profile.
+119	بروتوكول الكتابة غير معروف بعد.	طريقة الكتابة لسه مش معروفة.	Protokol penulisan belum diketahui.	App never know the write protocol yet.
+120	محاكاة إيقاف التشغيل	محاكاة إطفاء الكمبيوتر	Simulasi pematian	Shutdown simulation
+121	إيقاف تشغيل الكمبيوتر	إطفاء الكمبيوتر	Pematian komputer	PC shutdown
+122	لوحة صغيرة أو زر	كيبورد صغير أو زرار	Papan ketik mini atau tombol	Mini keyboard or button
+123	اسحب عناصر التحكم. تحافظ الشبكة على محاذاة المواضع.	اسحب الزراير والبكرات. الشبكة بتخلّي أماكنها مظبوطة.	Seret kontrol. Kisi menjaga posisinya tetap sejajar.	Drag the controls. The grid go keep their positions in line.
+124	انقر على عنصر تحكم لتعديل الإجراء.	دوس على زرار أو بكرة عشان تعدّل وظيفته.	Klik kontrol untuk mengedit tindakannya.	Click any control to edit wetin e dey do.
+125	يظهر الطراز وعناصر التحكم عند توصيل USB.	الموديل والتحكّمات بيظهروا لما توصل الـUSB.	Model dan kontrol muncul saat USB tersambung.	Model and controls go show when you connect USB.
+126	يعرض البحث واجهات USB HID ويبيّن أيّها له ملف إعداد.	البحث بيعرض واجهات USB HID وبيبيّن أنهي واجهة ليها بروفايل إعداد.	Pencarian menampilkan antarmuka HID USB beserta profil konfigurasi yang tersedia.	Search go list USB HID interfaces and show which one get config profile.
+127	هل تريد تطبيق التركيبات وإرسال الإشارات إلى اللوحة الصغيرة؟	تطبّق التركيبات وتبعت الإشارات للكيبورد الصغير؟	Terapkan kombinasi dan kirim sinyal ke papan ketik mini?	Apply combinations and send signals to the mini keyboard?
+128	هل تريد إعادة كتابة الإجراءات الفردية المسجّلة في الملف؟	تكتب تاني وظايف الزراير اللي سجّلتها في البروفايل؟	Tulis kembali tindakan tunggal yang Anda simpan di profil?	Write back the single-button actions wey you save for the profile?
+129	تظل الإجراءات الفردية المحفوظة متاحة عند ضغط مفتاح واحد.	وظايف الزراير المحفوظة هتفضل شغالة لما تدوس زرار واحد لوحده.	Tindakan tunggal yang disimpan tetap bisa digunakan saat satu tombol ditekan.	Your saved single-button actions still work if you press one button alone.
+130	تختبر أول تركيبة للإيقاف مدة خمس ثوانٍ دائمًا. دع الاختبار ينتهي أو ألغِه لإتاحة الوضع الفعلي.	أول تركيبة للإطفاء بتعمل تجربة ٥ ثواني دايمًا. سيبها تخلص أو الغيها عشان تفتح الوضع الحقيقي.	Kombinasi pematian pertama selalu menjalankan uji lima detik. Selesaikan atau batalkan untuk membuka mode sungguhan.	The first shutdown gesture always runs a five-second test. Let am finish or cancel am to unlock real mode.
+131	اختر من مفتاح إلى أربعة لكل إجراء. المسح يعطّل التركيبة.	اختار من زرار لأربع زراير لكل وظيفة. المسح بيوقف التركيبة دي.	Pilih satu hingga empat tombol per tindakan. Bersihkan untuk menonaktifkan kombinasi.	Choose one to four buttons for each action. Clear am to turn that gesture off.
+132	يرسل الجهاز إشارات المفاتيح. ينفّذ التطبيق التركيبات في ويندوز.	الجهاز بيبعت إشارات الزراير. التطبيق بينفّذ التركيبات في ويندوز.	Perangkat mengirim sinyal tombol. Aplikasi menjalankan kombinasi di Windows.	The device sends the button signals. The app runs the combinations for Windows.
+133	تُستخدم الخطوة نفسها لكل التدويرات المضبوطة للتحكم بالصوت. يمكن إبقاء التطبيق في منطقة الإعلام.	نفس الخطوة بتنطبق على كل اللفات اللي متظبطة للصوت. التطبيق ممكن يفضل في منطقة الإشعارات.	Langkah yang sama berlaku untuk semua arah putar yang diatur untuk volume. Aplikasi bisa tetap di baki sistem.	The same step applies to every turn wey you set for volume. The app fit stay for tray.
+134	يستخدم التحكم المباشر بالصوت خطوة ويندوز ويعمل والتطبيق مغلق. فعّل «خطوة التطبيق» لاستخدام القيمة أعلاه.	التحكّم المباشر في الصوت بيستخدم مقدار ويندوز وبيشتغل والتطبيق مقفول. شغّل «مقدار التغيير في التطبيق» عشان تستخدم القيمة اللي فوق.	Volume langsung memakai langkah Windows dan tetap berfungsi saat aplikasi ditutup. Aktifkan Langkah aplikasi untuk memakai nilai di atas.	Direct volume uses the Windows step and works even when app close. Turn on App step to use the value above.
+135	إجراء فردي في وضع التركيبات. الحفظ هنا يُبقي إشارات التركيبات.	وظيفة زرار لوحده في وضع التركيبات. الحفظ هنا بيخلّي إشارات التركيبات زي ما هي.	Tindakan tunggal dalam mode kombinasi. Menyimpan di sini mempertahankan sinyal kombinasi.	Single-button action for combination mode. If you save here, the combination signals go remain.
+136	لا يذكر الملف أوضاع إضاءة LED.	البروفايل مش مبيّن أوضاع إضاءة الـLED.	Profil tidak mencantumkan mode LED.	The profile no list LED modes.
+137	يدعم هذا الطراز أوضاع إضاءة. يتوقف اختيار اللون يدويًا على البرنامج الثابت وهو غير متاح في الملف المعروف.	الموديل ده بيدعم أوضاع إضاءة. اختيار اللون بإيدك بيعتمد على الفيرموير ومش متاح في البروفايل المعروف.	Model ini mendukung mode pencahayaan. Pemilihan warna manual bergantung pada firmware dan tidak tersedia di profil yang dikenali.	This model get lighting modes. Picking colour yourself depends on firmware and no dey available for the profile wey app recognise.
+138	عند تسجيل الدخول إلى ويندوز، يبدأ التطبيق في منطقة الإعلام أو مصغّرًا إلى أن تتصل اللوحة.	لما تسجّل دخول في ويندوز، التطبيق بيفتح في منطقة الإشعارات أو مصغّر لحد ما توصل الكيبورد.	Saat masuk ke Windows, aplikasi mulai di baki sistem atau diminimalkan hingga papan ketik tersambung.	When you sign in to Windows, app starts for tray or stays minimised until keyboard connects.
+139	تم حفظ التخطيط المخصص.	اتحفظ التخطيط المخصّص.	Tata letak khusus disimpan.	App don save custom layout.
+140	اللوحة الصغيرة متصلة. تتم مراقبة الإدخالات.	الكيبورد الصغير اتوصل. التطبيق بيتابع الإدخالات.	Papan ketik mini terhubung. Input dipantau.	Mini keyboard don connect. App dey watch inputs.
+141	وصّل لوحة مفاتيح USB صغيرة متوافقة.	وصّل كيبورد USB صغير متوافق.	Sambungkan papan ketik mini USB yang kompatibel.	Connect a compatible USB mini keyboard.
+142	انقطع اتصال الجهاز.	الجهاز اتفصل.	Perangkat terputus.	Device don disconnect.
+143	تم إرسال الإجراء. اختبره على اللوحة الصغيرة.	الوظيفة اتبعتت. جرّبها على الكيبورد الصغير.	Tindakan dikirim. Uji di papan ketik mini.	Action don send. Test am for the mini keyboard.
+144	أُلغي الإيقاف.	إطفاء الكمبيوتر اتلغى.	Pematian dibatalkan.	Shutdown don cancel.
+145	أُلغي الاختبار الأول.	أول تجربة اتلغت.	Uji awal dibatalkan.	First test don cancel.
+146	اكتمل الاختبار الأول.	أول تجربة خلصت.	Uji awal selesai.	First test don finish.
+147	يمكن للتركيبة التالية إيقاف الكمبيوتر.	التركيبة الجاية ممكن تطفي الكمبيوتر.	Kombinasi berikutnya bisa mematikan komputer.	The next gesture fit shut down PC.
+148	تستطيع التركيبة إيقاف الكمبيوتر عند تطبيق الوضع الفعلي والسماح بالإيقاف.	التركيبة هتقدر تطفي الكمبيوتر لما تطبّق الوضع الحقيقي وتسمح بالإطفاء.	Kombinasi dapat mematikan komputer setelah mode sungguhan diterapkan dan pematian diizinkan.	The gesture fit shut down PC when you apply real mode and allow shutdown.
+149	أول اختبار للإيقاف. يمكنك تركه ينتهي أو إلغاؤه.	أول تجربة للإطفاء. ممكن تسيبها تخلص أو تلغيها.	Uji pematian pertama. Biarkan selesai atau batalkan.	First shutdown test. You fit let am finish or cancel am.
+150	بدأ العدّ التنازلي. تركيبة الإلغاء متاحة.	العدّ التنازلي بدأ. ممكن تستخدم تركيبة الإلغاء.	Hitung mundur dimulai. Kombinasi pembatalan tersedia.	Countdown don start. You fit use the cancel gesture.
+151	اكتمل الاختبار. الكمبيوتر ما زال يعمل.	التجربة خلصت. الكمبيوتر لسه شغّال.	Uji selesai. Komputer tetap menyala.	Test don finish. PC still dey on.
+152	الإدخالات المضغوطة	الزراير المدوسة	Input yang ditekan	Inputs wey you press
+153	لا شيء	مفيش	tidak ada	none
+154	تم تفعيل التشغيل التلقائي.	التشغيل التلقائي اشتغل.	Mulai otomatis diaktifkan.	Auto-start don turn on.
+155	تم تعطيل التشغيل التلقائي.	التشغيل التلقائي اتقفل.	Mulai otomatis dinonaktifkan.	Auto-start don turn off.
+156	خطأ	خطأ	Kesalahan	Error
+157	مستوى صوت ويندوز	صوت ويندوز	Volume Windows	Windows volume
+158	المساحة غير كافية لهذا الحجم.	مفيش مساحة كفاية للحجم ده.	Ruang tidak cukup untuk ukuran ini.	Space no reach for this size.
+159	اختر إجراءً واحدًا على الأقل لهذا المقبض الدوّار.	اختار وظيفة واحدة على الأقل للبكرة دي.	Pilih setidaknya satu tindakan untuk kenop ini.	Choose at least one action for this dial.
+160	تم التعرّف على الجهاز.	التطبيق اتعرّف على الجهاز.	Perangkat dikenali.	App don recognise device.
+161	اختر تركيبتين مختلفتين لإطفاء الشاشة وإيقاف الكمبيوتر.	اختار تركيبتين مختلفتين عشان تطفي الشاشة وتطفي الكمبيوتر.	Pilih kombinasi yang berbeda untuk mematikan layar dan komputer.	Choose different gestures to turn screen off and shut down PC.
+162	استخدم «تطبيق وإرسال» لتسجيل عناصر التحكم الجديدة.	استخدم «طبّق وابعت» عشان تسجّل الزراير الجديدة.	Gunakan Terapkan dan kirim untuk mendaftarkan kontrol baru.	Use Apply and send to register the new controls.
+163	الوسائط المباشرة غير متاحة في بروتوكول FD.	الميديا المباشرة مش متاحة مع بروتوكول FD.	Media langsung tidak tersedia pada protokol FD.	Direct media no dey available for FD protocol.
+164	قد تعمل مفاتيح التعديل على الجهاز في الخطوة الأولى فقط.	مفاتيح التعديل ممكن تشتغل على الجهاز في أول خطوة بس.	Pada perangkat, tombol pengubah mungkin hanya berlaku pada langkah pertama.	For the device, modifier keys fit work for the first step only.
+165	زيادة	زوّد	Naikkan	Increase
+166	خفض	قلّل	Turunkan	Decrease

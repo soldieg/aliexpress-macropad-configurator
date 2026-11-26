@@ -674,7 +674,7 @@ fn discover_devices(api: &HidApi) -> Vec<Device> {
     devices.into_iter().map(|(_, device)| device).collect()
 }
 
-fn with_hid<T>(refresh: bool, operation: impl FnOnce(&HidApi) -> T) -> Result<T, String> {
+fn with_hid_session<T>(refresh: bool, operation: impl FnOnce(&HidApi) -> T) -> Result<T, String> {
     let mut state = HID_API.lock().unwrap_or_else(|error| error.into_inner());
     if let Some(api) = state.as_mut() {
         if refresh {
@@ -689,8 +689,51 @@ fn with_hid<T>(refresh: bool, operation: impl FnOnce(&HidApi) -> T) -> Result<T,
     }
 }
 
+#[cfg(not(target_os = "macos"))]
+use with_hid_session as with_hid;
+
+#[cfg(target_os = "macos")]
+fn with_hid<T: Send + 'static>(
+    refresh: bool,
+    operation: impl FnOnce(&HidApi) -> T + Send + 'static,
+) -> Result<T, String> {
+    use std::sync::mpsc::{channel, sync_channel, Sender};
+    use std::thread;
+
+    type Request = Box<dyn FnOnce() + Send>;
+    static WORKER: OnceLock<Result<Sender<Request>, String>> = OnceLock::new();
+    let worker = WORKER.get_or_init(|| {
+        let (requests, operations) = channel::<Request>();
+        // HIDAPI enumerates by running Core Foundation's default loop. Keep
+        // it on one worker so it cannot reenter the AppKit window callback.
+        thread::Builder::new()
+            .name("macos-hid-config".into())
+            .spawn(move || {
+                for operation in operations {
+                    operation();
+                }
+            })
+            .map_err(|error| error.to_string())?;
+        Ok(requests)
+    });
+    let worker = worker.as_ref().map_err(Clone::clone)?;
+    let (reply, result) = sync_channel(1);
+    worker
+        .send(Box::new(move || {
+            let _ = reply.send(with_hid_session(refresh, operation));
+        }))
+        .map_err(|_| "A sessão de configuração USB do macOS foi encerrada.")?;
+    result
+        .recv()
+        .map_err(|_| "A sessão de configuração USB do macOS foi encerrada.")?
+}
+
 fn open(device: &Device) -> Result<HidDevice, String> {
-    with_hid(false, |api| api.open_path(&device.path))?
+    #[cfg(target_os = "macos")]
+    let path = device.path.clone();
+    #[cfg(not(target_os = "macos"))]
+    let path = &device.path;
+    with_hid(false, move |api| api.open_path(path.as_c_str()))?
         .map_err(|err| format!("Não foi possível abrir o canal USB HID. {err}"))
 }
 

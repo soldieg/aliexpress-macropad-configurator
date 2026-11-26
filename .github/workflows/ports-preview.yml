@@ -1,0 +1,72 @@
+name: Linux and macOS preview
+
+on:
+  push:
+    branches: [preview/linux-macos]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ports-preview
+  cancel-in-progress: true
+
+jobs:
+  preview:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-24.04
+            artifact: linux-x86_64
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update Rust
+        run: |
+          uname -sm
+          rustup update stable
+      - name: Linux desktop dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libxkbcommon-dev libwayland-dev libgl1-mesa-dri libegl1 xvfb xauth xdotool imagemagick
+      - name: Tests
+        run: cargo +stable test --locked
+      - name: Release build
+        run: cargo +stable build --locked --release
+      - name: Linux desktop smoke test
+        if: runner.os == 'Linux'
+        env:
+          LIBGL_ALWAYS_SOFTWARE: '1'
+        run: |
+          mkdir -p dist
+          xvfb-run -a bash -euc '
+            export MINI_TECLADO_CONFIG="$RUNNER_TEMP/macropad-smoke.json"
+            ./target/release/mini-teclado-usb >"$RUNNER_TEMP/macropad-smoke.log" 2>&1 &
+            pid=$!
+            trap "kill $pid 2>/dev/null || true; cat \"$RUNNER_TEMP/macropad-smoke.log\"" EXIT
+            for attempt in {1..30}; do
+              if window=$(xdotool search --onlyvisible --pid "$pid" --name "Macro para Mini Teclados" 2>/dev/null | head -1) && [ -n "$window" ]; then
+                sleep 1
+                import -window "$window" dist/linux-x11.png
+                exit 0
+              fi
+              kill -0 "$pid"
+              sleep 1
+            done
+            exit 1
+          '
+      - name: Package Linux
+        if: runner.os == 'Linux'
+        run: |
+          mkdir -p bundle/linux dist
+          cp target/release/mini-teclado-usb LICENSE docs/platforms.md bundle/linux/
+          cp packaging/linux/70-mini-teclado-usb.rules bundle/linux/
+          tar -C bundle/linux -czf dist/mini-teclado-usb-${{ matrix.artifact }}.tar.gz .
+          tar -tzf dist/mini-teclado-usb-${{ matrix.artifact }}.tar.gz
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mini-teclado-usb-${{ matrix.artifact }}
+          path: dist/
+          if-no-files-found: error

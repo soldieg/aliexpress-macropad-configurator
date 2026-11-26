@@ -1,13 +1,29 @@
-#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+#![cfg_attr(all(windows, not(debug_assertions)), windows_subsystem = "windows")]
 
+#[cfg_attr(target_os = "linux", path = "linux_audio.rs")]
+#[cfg_attr(target_os = "macos", path = "macos_audio.rs")]
 mod audio;
+#[cfg(windows)]
 mod countdown_window;
 mod custom;
 mod device;
 mod gestures;
 mod i18n;
+mod input;
+#[cfg(target_os = "linux")]
+mod linux;
+#[cfg(target_os = "macos")]
+mod macos;
+#[cfg(not(windows))]
+mod desktop_windows;
+#[cfg(not(windows))]
+mod desktop_tray;
+#[cfg(not(windows))]
+use desktop_windows::{countdown_window, volume_osd};
+#[cfg_attr(not(windows), path = "desktop.rs")]
 mod platform;
 mod ui;
+#[cfg(windows)]
 mod volume_osd;
 
 use device::{Binding, ControlKind, Device, Layout};
@@ -1456,6 +1472,10 @@ fn show_window(ctx: &egui::Context) {
 
 impl eframe::App for App {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+        #[cfg(not(windows))]
+        if platform::take_show_request() {
+            show_window(ctx);
+        }
         if std::mem::take(&mut self.start_minimized) {
             ctx.send_viewport_cmd(egui::ViewportCommand::Minimized(true));
             if self
@@ -1484,7 +1504,6 @@ impl eframe::App for App {
         }
         if ctx.input(|i| i.viewport().close_requested()) {
             if !self.exiting
-                && self.hwnd.is_some()
                 && self.listener.as_ref().is_some_and(|l| l.tray_available)
             {
                 ctx.send_viewport_cmd(egui::ViewportCommand::CancelClose);
@@ -1527,6 +1546,13 @@ impl eframe::App for App {
             self.status = "Demonstração concluída. O computador continua ligado.".into();
         }
         self.update_countdown(ctx);
+        #[cfg(not(windows))]
+        {
+            if let Some(window) = &mut self.countdown {
+                window.render(ctx);
+            }
+            self.volume_osd.render(ctx);
+        }
         ctx.request_repaint_after(self.next_scan.saturating_duration_since(now));
         self.keyboard_shortcuts(ctx);
         self.render(ctx);

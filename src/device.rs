@@ -139,10 +139,28 @@ fn parse_id(pair: &str) -> Option<(u16, u16)> {
 pub fn settings_dir() -> PathBuf {
     std::env::var_os("MINI_TECLADO_CONFIG")
         .map(PathBuf::from)
-        .or_else(|| {
-            std::env::var_os("APPDATA").map(|root| PathBuf::from(root).join("MiniTecladoUSB"))
-        })
+        .or_else(settings_base)
         .unwrap_or_else(|| PathBuf::from("."))
+}
+
+#[cfg(windows)]
+fn settings_base() -> Option<PathBuf> {
+    std::env::var_os("APPDATA").map(|root| PathBuf::from(root).join("MiniTecladoUSB"))
+}
+
+#[cfg(target_os = "macos")]
+fn settings_base() -> Option<PathBuf> {
+    std::env::var_os("HOME")
+        .map(|home| PathBuf::from(home).join("Library/Application Support/MiniTecladoUSB"))
+}
+
+#[cfg(not(any(windows, target_os = "macos")))]
+fn settings_base() -> Option<PathBuf> {
+    std::env::var_os("XDG_CONFIG_HOME")
+        .map(PathBuf::from)
+        .filter(|path| path.is_absolute())
+        .or_else(|| std::env::var_os("HOME").map(|home| PathBuf::from(home).join(".config")))
+        .map(|path| path.join("MiniTecladoUSB"))
 }
 
 fn custom_file(name: &str) -> String {
@@ -390,6 +408,12 @@ type ConfigEntry<'a> = ((u16, u16), &'a str, Protocol);
 
 fn configured_protocol(info: &DeviceInfo, config: &[ConfigEntry<'_>]) -> Option<Protocol> {
     let id = (info.vendor_id(), info.product_id());
+    // Non-Windows HIDAPI can enumerate several top-level collections with an
+    // identical OS path. Require a vendor collection before selecting one by MI.
+    #[cfg(not(windows))]
+    if !is_usb_vendor_collection(info.bus_type(), info.usage_page()) {
+        return None;
+    }
     if fd_interface(info) {
         return Some(Protocol::Fd);
     }
@@ -402,7 +426,7 @@ fn configured_protocol(info: &DeviceInfo, config: &[ConfigEntry<'_>]) -> Option<
     if id == KNOWN_WEBHUB_DEVICE
         && (!matches!(info.bus_type(), BusType::Usb)
             || info.usage_page() != 0xff00
-            || !path_matches_interface(info.path().to_bytes(), b"mi_02"))
+            || !device_interface_matches(info, b"mi_02"))
     {
         return None;
     }
@@ -412,7 +436,7 @@ fn configured_protocol(info: &DeviceInfo, config: &[ConfigEntry<'_>]) -> Option<
             *configured == id
                 && (id != KNOWN_LEGACY_DEVICE || *protocol == Protocol::Legacy)
                 && ((id == KNOWN_WEBHUB_DEVICE) == (*protocol == Protocol::WebHub))
-                && path_matches_interface(info.path().to_bytes(), interface.as_bytes())
+                && device_interface_matches(info, interface.as_bytes())
         })
         .map(|(_, _, protocol)| *protocol)
 }
@@ -422,15 +446,12 @@ fn fd_interface(info: &DeviceInfo) -> bool {
         (info.vendor_id(), info.product_id()),
         info.bus_type(),
         info.usage_page(),
-        info.path().to_bytes(),
+        device_interface_matches(info, b"mi_00"),
     )
 }
 
-fn is_fd_collection(id: (u16, u16), bus: BusType, page: u16, path: &[u8]) -> bool {
-    id == KNOWN_FD_DEVICE
-        && matches!(bus, BusType::Usb)
-        && page == 0xff00
-        && path_matches_interface(path, b"mi_00")
+fn is_fd_collection(id: (u16, u16), bus: BusType, page: u16, is_interface_zero: bool) -> bool {
+    id == KNOWN_FD_DEVICE && matches!(bus, BusType::Usb) && page == 0xff00 && is_interface_zero
 }
 
 fn fd_layout() -> Layout {
@@ -449,6 +470,31 @@ fn fd_layout() -> Layout {
     parse_layout(&source).expect("perfil FD embutido").1
 }
 
+#[cfg(windows)]
+fn device_interface_matches(info: &DeviceInfo, interface: &[u8]) -> bool {
+    path_matches_interface(info.path().to_bytes(), interface)
+}
+
+#[cfg(not(windows))]
+fn device_interface_matches(info: &DeviceInfo, interface: &[u8]) -> bool {
+    number_matches_interface(info.interface_number(), interface)
+}
+
+#[cfg(any(not(windows), test))]
+fn number_matches_interface(number: i32, interface: &[u8]) -> bool {
+    if interface.len() != 5
+        || !interface[..3].eq_ignore_ascii_case(b"mi_")
+        || !interface[3..].iter().all(u8::is_ascii_hexdigit)
+    {
+        return false;
+    }
+    std::str::from_utf8(&interface[3..])
+        .ok()
+        .and_then(|hex| u8::from_str_radix(hex, 16).ok())
+        .is_some_and(|interface_number| i32::from(interface_number) == number)
+}
+
+#[cfg(any(windows, test))]
 fn path_matches_interface(path: &[u8], interface: &[u8]) -> bool {
     path.iter()
         .enumerate()
@@ -513,6 +559,7 @@ fn candidates(api: &HidApi) -> Vec<UsbCandidate> {
         let id = (info.vendor_id(), info.product_id());
         let protocol = configured_protocol(info, &config);
         let supported = protocol.is_some()
+            && (cfg!(windows) || protocol != Some(Protocol::Fd))
             && !(has_fd_endpoint && id == KNOWN_FD_DEVICE && protocol != Some(Protocol::Fd));
         let manufacturer = info.manufacturer_string().unwrap_or_default().trim();
         let product = info.product_string().unwrap_or_default().trim();
@@ -583,6 +630,9 @@ fn discover_devices(api: &HidApi) -> Vec<Device> {
         let Some(protocol) = configured_protocol(info, &config) else {
             continue;
         };
+        if protocol == Protocol::Fd && !cfg!(windows) {
+            continue;
+        }
         // A unit with the FD command endpoint exposes normal input under MI_01.
         // Don't list a legacy configuration channel for a matching product in
         // the same session when its FD endpoint has been identified.
@@ -616,6 +666,11 @@ fn discover_devices(api: &HidApi) -> Vec<Device> {
     // Prefer manufacturer configuration collections over standard keyboard or
     // media collections on variants whose MI also exposes multiple collections.
     devices.sort_by_key(|(key, _)| *key);
+    #[cfg(not(windows))]
+    {
+        let mut seen = std::collections::HashSet::new();
+        devices.retain(|(_, device)| seen.insert(device.path.clone()));
+    }
     devices.into_iter().map(|(_, device)| device).collect()
 }
 
@@ -1034,9 +1089,21 @@ mod tests {
     }
 
     #[test]
+    fn native_usb_interface_numbers_match_only_complete_selectors() {
+        assert!(number_matches_interface(1, b"mi_01"));
+        assert!(number_matches_interface(10, b"MI_0a"));
+        assert!(!number_matches_interface(0, b"mi_01"));
+        assert!(!number_matches_interface(-1, b"mi_ff"));
+        assert!(!number_matches_interface(256, b"mi_00"));
+        assert!(!number_matches_interface(1, b"mi_01&col01"));
+        assert!(!number_matches_interface(1, b"mi_+1"));
+        assert!(!number_matches_interface(1, b"mi_001"));
+    }
+
+    #[test]
     fn fd_protocol_is_limited_to_its_confirmed_usb_collection() {
-        let correct = b"hid#vid_1189&pid_8840&mi_00#abc";
-        let input = b"hid#vid_1189&pid_8840&mi_01&col04#abc";
+        let correct = path_matches_interface(b"hid#vid_1189&pid_8840&mi_00#abc", b"mi_00");
+        let input = path_matches_interface(b"hid#vid_1189&pid_8840&mi_01&col04#abc", b"mi_00");
         assert!(is_fd_collection(
             KNOWN_FD_DEVICE,
             BusType::Usb,
@@ -1056,6 +1123,12 @@ mod tests {
             correct
         ));
         assert!(!is_fd_collection(KNOWN_FD_DEVICE, BusType::Usb, 1, correct));
+        assert!(is_fd_collection(
+            KNOWN_FD_DEVICE,
+            BusType::Usb,
+            0xff00,
+            number_matches_interface(0, b"mi_00")
+        ));
         assert_eq!(fd_layout().controls.len(), 7);
     }
 

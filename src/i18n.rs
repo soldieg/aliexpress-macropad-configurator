@@ -4,13 +4,15 @@ use std::{
     collections::HashMap,
     fs,
     path::PathBuf,
-    ptr::null_mut,
     sync::{
         atomic::{AtomicUsize, Ordering},
         LazyLock,
     },
 };
 use unicode_bidi::{BidiInfo, Level};
+#[cfg(windows)]
+use std::ptr::null_mut;
+#[cfg(windows)]
 use windows_sys::Win32::Globalization::{GetUserPreferredUILanguages, MUI_LANGUAGE_NAME};
 
 const KEYS: &str = include_str!("../assets/translations/keys.txt");
@@ -277,7 +279,7 @@ pub fn formatted(template: &str, args: &[&str]) -> String {
 }
 
 fn locale_index(locale: &str) -> Option<usize> {
-    let lower = locale.trim().to_ascii_lowercase();
+    let lower = locale.trim().split(['.', '@']).next()?.replace('_', "-").to_ascii_lowercase();
     if lower == "ar-eg" || lower == "arz" {
         return Some(9);
     }
@@ -285,7 +287,8 @@ fn locale_index(locale: &str) -> Option<usize> {
     LANGUAGES.iter().position(|(code, _)| *code == prefix)
 }
 
-fn windows_language() -> usize {
+#[cfg(windows)]
+fn system_language() -> usize {
     let (mut count, mut length) = (0, 0);
     unsafe { GetUserPreferredUILanguages(MUI_LANGUAGE_NAME, &mut count, null_mut(), &mut length) };
     if length == 0 {
@@ -308,6 +311,40 @@ fn windows_language() -> usize {
         .filter(|name| !name.is_empty())
         .find_map(|name| locale_index(&String::from_utf16_lossy(name)))
         .unwrap_or(0)
+}
+
+#[cfg(target_os = "linux")]
+fn system_language() -> usize {
+    ["LC_ALL", "LC_MESSAGES", "LANG"].into_iter()
+        .filter_map(|key| std::env::var(key).ok())
+        .find_map(|locale| locale_index(&locale))
+        .unwrap_or(0)
+}
+
+#[cfg(target_os = "macos")]
+fn system_language() -> usize {
+    use std::ffi::{c_void, CStr};
+    #[link(name = "CoreFoundation", kind = "framework")]
+    extern "C" {
+        fn CFLocaleCopyPreferredLanguages() -> *const c_void;
+        fn CFArrayGetCount(array: *const c_void) -> isize;
+        fn CFArrayGetValueAtIndex(array: *const c_void, index: isize) -> *const c_void;
+        fn CFStringGetCString(text: *const c_void, buffer: *mut std::ffi::c_char, size: isize, encoding: u32) -> u8;
+        fn CFRelease(value: *const c_void);
+    }
+    unsafe {
+        let languages = CFLocaleCopyPreferredLanguages();
+        if languages.is_null() { return 0; }
+        let found = (0..CFArrayGetCount(languages)).find_map(|index| {
+            let value = CFArrayGetValueAtIndex(languages, index);
+            let mut buffer = [0; 96];
+            (CFStringGetCString(value, buffer.as_mut_ptr(), buffer.len() as isize, 0x08000100) != 0)
+                .then(|| CStr::from_ptr(buffer.as_ptr()).to_str().ok().and_then(locale_index))
+                .flatten()
+        });
+        CFRelease(languages);
+        found.unwrap_or(0)
+    }
 }
 
 fn settings_file() -> PathBuf {
@@ -337,8 +374,9 @@ pub fn save(ctx: &egui::Context, setting: Option<usize>) -> Result<(), String> {
 }
 
 fn activate(ctx: &egui::Context, setting: Option<usize>) {
-    let index = setting.unwrap_or_else(windows_language);
+    let index = setting.unwrap_or_else(system_language);
     ACTIVE.store(index, Ordering::Relaxed);
+    #[cfg(windows)]
     let files: &[&str] = match LANGUAGES[index].0 {
         "zh" => &["msyh.ttc", "simsun.ttc"],
         "ja" => &["YuGothR.ttc", "meiryo.ttc"],
@@ -346,13 +384,31 @@ fn activate(ctx: &egui::Context, setting: Option<usize>) {
         "ar" | "arz" | "ur" => &["tahoma.ttf", "arial.ttf"],
         _ => &[],
     };
+    #[cfg(windows)]
+    let fallback = std::env::var_os("WINDIR")
+        .map(|windows| PathBuf::from(windows).join("Fonts"))
+        .and_then(|dir| files.iter().find_map(|file| fs::read(dir.join(file)).ok()));
+    #[cfg(target_os = "linux")]
+    let files: &[&str] = match LANGUAGES[index].0 {
+        "zh" | "ja" => &["/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc"],
+        "hi" | "mr" => &["/usr/share/fonts/truetype/noto/NotoSansDevanagari-Regular.ttf"],
+        "bn" => &["/usr/share/fonts/truetype/noto/NotoSansBengali-Regular.ttf"],
+        "ar" | "arz" | "ur" => &["/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", "/usr/share/fonts/truetype/noto/NotoSansArabic-Regular.ttf"],
+        _ => &[],
+    };
+    #[cfg(target_os = "macos")]
+    let files: &[&str] = match LANGUAGES[index].0 {
+        "zh" => &["/System/Library/Fonts/PingFang.ttc", "/System/Library/Fonts/Hiragino Sans GB.ttc"],
+        "ja" => &["/System/Library/Fonts/ヒラギノ角ゴシック W3.ttc", "/System/Library/Fonts/Hiragino Sans W3.ttc"],
+        "hi" | "mr" => &["/System/Library/Fonts/Devanagari Sangam MN.ttc", "/System/Library/Fonts/Supplemental/Devanagari Sangam MN.ttc", "/System/Library/Fonts/Supplemental/DevanagariMT.ttc"],
+        "bn" => &["/System/Library/Fonts/Bangla Sangam MN.ttc", "/System/Library/Fonts/Supplemental/Bangla Sangam MN.ttc"],
+        "ar" | "arz" | "ur" => &["/System/Library/Fonts/Supplemental/Arial.ttf", "/System/Library/Fonts/GeezaPro.ttc"],
+        _ => &[],
+    };
+    #[cfg(not(windows))]
+    let fallback = files.iter().find_map(|file| fs::read(file).ok());
     let mut fonts = egui::FontDefinitions::default();
-    if let Some(windows) = std::env::var_os("WINDIR") {
-        let directory = PathBuf::from(windows).join("Fonts");
-        if let Some(data) = files
-            .iter()
-            .find_map(|file| fs::read(directory.join(file)).ok())
-        {
+    if let Some(data) = fallback {
             let name = "windows-fallback".to_owned();
             fonts
                 .font_data
@@ -360,7 +416,6 @@ fn activate(ctx: &egui::Context, setting: Option<usize>) {
             for family in [egui::FontFamily::Proportional, egui::FontFamily::Monospace] {
                 fonts.families.entry(family).or_default().push(name.clone());
             }
-        }
     }
     ctx.set_fonts(fonts);
 }

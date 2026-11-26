@@ -2,20 +2,30 @@
 //! Supported packets here are the keyboard and rotary wheel actually described as tested upstream.
 
 use super::{packet, Binding, Device, REPORT_LEN};
+#[cfg(windows)]
 use std::ffi::c_void;
+#[cfg(windows)]
 use std::fs::{File, OpenOptions};
+#[cfg(windows)]
 use std::io;
+#[cfg(windows)]
 use std::os::windows::{
     fs::OpenOptionsExt,
     io::{AsRawHandle, FromRawHandle, OwnedHandle, RawHandle},
 };
+#[cfg(windows)]
 use std::ptr::{null, null_mut};
+#[cfg(windows)]
 use std::time::Duration;
 
+#[cfg(windows)]
 const GENERIC_READ_WRITE: u32 = 0xc000_0000;
+#[cfg(windows)]
 const OVERLAPPED_IO: u32 = 0x4000_0000;
+#[cfg(windows)]
 const IO_PENDING: i32 = 997;
 
+#[cfg(windows)]
 #[repr(C)]
 struct Overlapped {
     internal: usize,
@@ -25,6 +35,7 @@ struct Overlapped {
     event: RawHandle,
 }
 
+#[cfg(windows)]
 #[link(name = "kernel32")]
 extern "system" {
     fn CreateEventW(attrs: *const c_void, manual: i32, initial: i32, name: *const u16)
@@ -52,6 +63,7 @@ extern "system" {
     fn CancelIoEx(handle: RawHandle, io: *mut Overlapped) -> i32;
 }
 
+#[cfg(windows)]
 #[link(name = "hid")]
 extern "system" {
     fn HidD_GetPreparsedData(handle: RawHandle, data: *mut *mut c_void) -> u8;
@@ -59,6 +71,7 @@ extern "system" {
     fn HidP_GetCaps(data: *const c_void, caps: *mut u16) -> i32;
 }
 
+#[cfg(windows)]
 fn open(device: &Device) -> Result<File, String> {
     let path = device.path.to_str().map_err(|_| "Caminho HID inválido.")?;
     let handle = OpenOptions::new()
@@ -82,10 +95,16 @@ fn open(device: &Device) -> Result<File, String> {
     Ok(handle)
 }
 
+#[cfg(windows)]
 pub(super) fn probe(device: &Device) -> Result<u8, String> {
     // The upstream FD probe uses the fixed descriptor ID without sending any write.
     let _handle = open(device)?;
     Ok(3)
+}
+
+#[cfg(not(windows))]
+pub(super) fn probe(_: &Device) -> Result<u8, String> {
+    Err("O transporte deste protocolo FD está disponível no Windows.".into())
 }
 
 pub(super) fn reports(
@@ -128,6 +147,7 @@ pub(super) fn reports(
     ])
 }
 
+#[cfg(windows)]
 fn write(handle: &File, report: &[u8; REPORT_LEN]) -> io::Result<()> {
     let raw_event = unsafe { CreateEventW(null(), 1, 0, null()) };
     if raw_event.is_null() {
@@ -179,6 +199,7 @@ fn write(handle: &File, report: &[u8; REPORT_LEN]) -> io::Result<()> {
     Ok(())
 }
 
+#[cfg(windows)]
 pub(super) fn send(device: &Device, reports: &[[u8; REPORT_LEN]]) -> Result<(), String> {
     let (blocks, remainder) = reports.as_chunks::<4>();
     if !remainder.is_empty()
@@ -204,6 +225,11 @@ pub(super) fn send(device: &Device, reports: &[[u8; REPORT_LEN]]) -> Result<(), 
         std::thread::sleep(Duration::from_millis(200));
     }
     Ok(())
+}
+
+#[cfg(not(windows))]
+pub(super) fn send(_: &Device, _: &[[u8; REPORT_LEN]]) -> Result<(), String> {
+    Err("O transporte deste protocolo FD está disponível no Windows.".into())
 }
 
 #[cfg(test)]

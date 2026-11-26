@@ -2,6 +2,10 @@
 
 O configurador usa a mesma interface Rust/egui nas três plataformas. Layouts, editor, animações, iluminação conforme o aparelho, atalhos da janela e 16 opções de idioma são compartilhados. Os pacotes desta branch são experimentais.
 
+Na prévia 0.8.0-alpha.2, **Restaurar modo direto** grava de volta as ações das teclas reservadas pelas combinações. Desativar as combinações e aplicar tem o mesmo efeito. No modo direto, as ações compatíveis ficam no firmware e funcionam com o aplicativo encerrado. As teclas reservadas por combinações precisam do aplicativo em execução.
+
+No Windows, após o primeiro uso a janela abre na área de notificação. A inicialização junto ao Windows pode ser desativada na interface. Linux e macOS usam seus controles de inicialização já existentes.
+
 | Recurso | Linux | macOS |
 | --- | --- | --- |
 | Configuração USB | HIDAPI por hidraw, com identificação pelo número de interface. | HIDAPI por IOKit, com identificação pelo número de interface. |

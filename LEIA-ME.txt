@@ -1,10 +1,13 @@
-Macro para Mini Teclados 0.7.0 — Windows x64
+Macro para Mini Teclados 0.7.1 — Windows x64
 
 Extraia a pasta e abra Macro-para-Mini-Teclados.exe. Identificar USB
 mostra o modelo, o ID USB, a interface, o protocolo
 conhecido e, quando há indícios, um possível leiaute para aparelhos
 desconhecidos. Um leiaute sugerido serve como referência visual. A escrita
 USB exige um perfil de protocolo conhecido.
+Em aparelhos reconhecidos, Testar relatório faz a sondagem de conexão do
+RSoft. Escolha Automática ou um ID compatível com a interface. O teste
+verifica o transporte HID, sem aplicar macro, iluminação ou combinação.
 O seletor ao lado de Identificar USB segue o idioma de exibição do Windows
 ou permite fixar um idioma. Português do Brasil é usado quando nenhum dos
 idiomas de interface disponíveis corresponde à preferência do Windows.

@@ -410,7 +410,18 @@ impl App {
                     });
                 });
         }
-        custom::usb_dialog(ctx, &mut self.usb_dialog);
+        let report = self.devices.get(self.current).map(|device| {
+            (
+                device::report_ids(device),
+                self.profile().and_then(|profile| profile.report_id),
+            )
+        });
+        if let Some(requested) = custom::usb_dialog(ctx, &mut self.usb_dialog, report) {
+            let result = self.test_usb_report(requested);
+            self.result(result);
+            let feedback = i18n::status(&self.status);
+            ctx.data_mut(|data| data.insert_temp(egui::Id::new("usb-report-feedback"), feedback));
+        }
         let remove_id = egui::Id::new(DELETE_LAYOUT);
         if let Some((profile, index)) = ctx.data(|data| data.get_temp::<(String, u8)>(remove_id)) {
             let modal = egui::Modal::new(remove_id).show(ctx, |ui| {
@@ -994,13 +1005,15 @@ impl App {
             }
         });
         ui.horizontal_wrapped(|ui| {
-            ui.label(tr("Passo por giro"));
-            if ui
-                .add(egui::Slider::new(&mut step, 1..=10).suffix("%"))
-                .changed()
-            {
-                let result = self.set_volume_step(step);
-                self.result(result);
+            if self.profile().is_some_and(|profile| profile.volume_mode) {
+                ui.label(tr("Passo por giro"));
+                if ui
+                    .add(egui::Slider::new(&mut step, 1..=10).suffix("%"))
+                    .changed()
+                {
+                    let result = self.set_volume_step(step);
+                    self.result(result);
+                }
             }
             if ui.small_button(tr("Conferir volume")).clicked() {
                 let result = audio::current().map(|level| {
@@ -1015,7 +1028,7 @@ impl App {
             if managed {
                 tr("O mesmo passo vale para todos os giros configurados como volume. O aplicativo pode ficar na bandeja.")
             } else {
-                tr("O volume direto usa o passo do Windows e funciona com o aplicativo fechado. Ative Passo do aplicativo para usar o valor acima.")
+                tr("O volume direto usa o passo do Windows e funciona com o aplicativo fechado.")
             },
         );
     }

@@ -31,6 +31,7 @@ struct Profile {
     volume_steps: BTreeMap<String, u8>,
     volume_step: u8,
     volume_mode: bool,
+    report_id: Option<u8>,
     volume_managed: BTreeSet<u8>,
     gestures: GestureConfig,
     simulation: bool,
@@ -51,6 +52,7 @@ impl Default for Profile {
             volume_steps: BTreeMap::new(),
             volume_step: 2,
             volume_mode: false,
+            report_id: None,
             volume_managed: BTreeSet::new(),
             gestures: GestureConfig {
                 display: 1,
@@ -820,6 +822,27 @@ impl App {
         Ok(d)
     }
 
+    fn probe_target(&self, device: &Device) -> Result<u8, String> {
+        device::probe_report(device, self.profile().and_then(|profile| profile.report_id))
+    }
+
+    fn test_usb_report(&mut self, requested: Option<u8>) -> Result<String, String> {
+        let device = self.target()?;
+        let report = device::probe_report(&device, requested)?;
+        let previous = self.profile_mut().report_id;
+        if previous != requested {
+            self.profile_mut().report_id = requested;
+            if let Err(error) = self.persist() {
+                self.profile_mut().report_id = previous;
+                return Err(error);
+            }
+        }
+        Ok(i18n::formatted(
+            "A interface USB aceitou o relatório {}.",
+            &[&report.to_string()],
+        ))
+    }
+
     fn manages_binding(&self, layer: u8, slot: u8) -> bool {
         let host = self.profile().map_or(0, |p| p.host);
         layer == 1
@@ -878,7 +901,7 @@ impl App {
         }
         let mut reports = Vec::new();
         if !changes.is_empty() {
-            let id = device::probe(&device)?;
+            let id = self.probe_target(&device)?;
             for (slot, binding) in &changes {
                 reports.extend(device::binding_reports(&device, id, *slot, 1, 0, binding)?);
             }
@@ -935,7 +958,7 @@ impl App {
             {
                 return Err("Outro controle já usa a tecla reservada para este ajuste. Altere aquele atalho primeiro.".into());
             }
-            let id = device::probe(&d)?;
+            let id = self.probe_target(&d)?;
             let reports = device::binding_reports(
                 &d,
                 id,
@@ -976,7 +999,7 @@ impl App {
             if conflict {
                 return Err("Esse atalho usa uma tecla reservada pelo ajuste de volume.".into());
             }
-            let id = device::probe(&d)?;
+            let id = self.probe_target(&d)?;
             let reports =
                 device::binding_reports(&d, id, self.slot, self.layer, self.delay, &binding)?;
             device::send(&d, &reports)?;
@@ -1045,7 +1068,7 @@ impl App {
             self.listen(ctx)?;
         }
         let id = if targets != 0 {
-            Some(device::probe(&d)?)
+            Some(self.probe_target(&d)?)
         } else {
             None
         };
@@ -1133,7 +1156,7 @@ impl App {
             self.rgb = device::apply_lighting(&d, self.rgb)?;
             return Ok("Iluminação RGB aplicada e confirmada pela leitura do aparelho.".into());
         }
-        let id = device::probe(&d)?;
+        let id = self.probe_target(&d)?;
         let reports = device::led_reports(&d, id, self.layer, self.led, self.led_color)?;
         device::send(&d, &reports)?;
         Ok("Iluminação enviada ao aparelho.".into())

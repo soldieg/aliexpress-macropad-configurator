@@ -420,12 +420,15 @@ fn aligned(value: f32, extent: u16, size: u8) -> u16 {
     value.min(highest) * GRID
 }
 
-pub fn usb_dialog(ctx: &egui::Context, dialog: &mut Option<Result<Vec<UsbCandidate>, String>>) {
-    let Some(results) = dialog.as_mut() else {
-        return;
-    };
+pub fn usb_dialog(
+    ctx: &egui::Context,
+    dialog: &mut Option<Result<Vec<UsbCandidate>, String>>,
+    report: Option<(&[u8], Option<u8>)>,
+) -> Option<Option<u8>> {
+    let results = dialog.as_mut()?;
     let mut visible = true;
     let mut close = false;
+    let mut requested = None;
     egui::Window::new(crate::i18n::tr("Identificar USB"))
         .open(&mut visible)
         .collapsible(false)
@@ -439,6 +442,27 @@ pub fn usb_dialog(ctx: &egui::Context, dialog: &mut Option<Result<Vec<UsbCandida
                 }
                 close = ui.button(crate::i18n::tr("Fechar")).clicked();
             });
+            if let Some((allowed, selected)) = report {
+                ui.horizontal_wrapped(|ui| {
+                    ui.label(crate::i18n::tr("Relatório USB"));
+                    let mut choice = selected;
+                    let label = selected.map_or_else(|| crate::i18n::tr("Automática").to_owned(), |id| id.to_string());
+                    egui::ComboBox::from_id_salt("usb-report")
+                        .selected_text(label)
+                        .show_ui(ui, |ui| {
+                            ui.selectable_value(&mut choice, None, crate::i18n::tr("Automática"));
+                            for &id in allowed {
+                                ui.selectable_value(&mut choice, Some(id), id.to_string());
+                            }
+                        });
+                    if choice != selected || ui.button(crate::i18n::tr("Testar relatório")).clicked() {
+                        requested = Some(choice);
+                    }
+                });
+                if let Some(text) = ctx.data(|data| data.get_temp::<String>(egui::Id::new("usb-report-feedback"))) {
+                    ui.label(text);
+                }
+            }
             ui.separator();
             match results {
                 Ok(devices) if devices.is_empty() => {
@@ -494,7 +518,9 @@ pub fn usb_dialog(ctx: &egui::Context, dialog: &mut Option<Result<Vec<UsbCandida
         });
     if !visible || close {
         *dialog = None;
+        ctx.data_mut(|data| data.remove::<String>(egui::Id::new("usb-report-feedback")));
     }
+    requested
 }
 
 #[cfg(test)]

@@ -648,6 +648,23 @@ fn write_report(handle: &HidDevice, report: &[u8; REPORT_LEN]) -> Result<(), Str
 }
 
 pub fn probe(device: &Device) -> Result<u8, String> {
+    probe_report(device, None)
+}
+
+pub fn report_ids(device: &Device) -> &'static [u8] {
+    match device.protocol {
+        Protocol::Fd => &[3],
+        Protocol::WebHub => &[0],
+        Protocol::Legacy if (device.vid, device.pid) == KNOWN_LEGACY_DEVICE => &[3],
+        _ => &[0, 2, 3],
+    }
+}
+
+pub fn probe_report(device: &Device, requested: Option<u8>) -> Result<u8, String> {
+    let allowed = report_ids(device);
+    if requested.is_some_and(|id| !allowed.contains(&id)) {
+        return Err("Relatório HID incompatível.".into());
+    }
     if device.protocol == Protocol::Fd {
         return fd::probe(device);
     }
@@ -658,13 +675,8 @@ pub fn probe(device: &Device) -> Result<u8, String> {
         });
     }
     let handle = open(device)?;
-    let ids: &[u8] = if (device.vid, device.pid) == KNOWN_LEGACY_DEVICE {
-        // This interface was observed with the ID-3 payload on this hardware.
-        &[3]
-    } else {
-        // Upstream tries these report IDs with no command bytes as a version probe.
-        &[0, 2, 3]
-    };
+    // Upstream uses all-zero command payloads for report-ID tests.
+    let ids = requested.as_ref().map_or(allowed, std::slice::from_ref);
     for &id in ids {
         if write_report(&handle, &packet(id, &[])).is_ok() {
             return Ok(id);
@@ -1202,6 +1214,22 @@ mod tests {
             binding_reports(&device, 2, 1, 1, 0, &Binding::Media(0xea)).unwrap()[1],
             packet(2, &[1, 18, 128, 0])
         );
+    }
+
+    #[test]
+    fn manual_usb_report_respects_fixed_protocol_ids_before_opening_hardware() {
+        let mut pad = fixture(Protocol::Legacy, default_layout());
+        (pad.vid, pad.pid) = KNOWN_LEGACY_DEVICE;
+        assert_eq!(report_ids(&pad), &[3]);
+        assert_eq!(
+            probe_report(&pad, Some(0)),
+            Err("Relatório HID incompatível.".into())
+        );
+        pad.protocol = Protocol::WebHub;
+        assert_eq!(report_ids(&pad), &[0]);
+        assert!(probe_report(&pad, Some(3)).is_err());
+        pad.protocol = Protocol::Extended;
+        assert_eq!(report_ids(&pad), &[0, 2, 3]);
     }
 
     #[test]

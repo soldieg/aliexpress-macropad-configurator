@@ -920,4 +920,13 @@ mod tests {
         assert!(plist.contains("<string>--bandeja</string>"));
         assert!(plist.contains(PLIST_MARKER));
     }
+
+    #[test]
+    fn track_actions_are_rejected_before_reserving_the_firmware_keys() {
+        for usage in [0xb5, 0xb6, 0xcd] {
+            assert!(validate_replay(&Binding::Media(usage))
+                .unwrap_err()
+                .contains("Mantenha essa tecla em modo direto."));
+        }
+    }
 }

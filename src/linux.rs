@@ -521,11 +521,7 @@ fn replay_events(binding: &Binding) -> Result<Vec<Event>, String> {
     Ok(events)
 }
 
-pub fn replay(binding: &Binding) -> Result<(), String> {
-    let events = replay_events(binding)?;
-    if events.is_empty() {
-        return Ok(());
-    }
+fn virtual_output() -> Result<std::sync::MutexGuard<'static, Option<VirtualInput>>, String> {
     static OUTPUT: Mutex<Option<VirtualInput>> = Mutex::new(None);
     let mut output = OUTPUT
         .lock()
@@ -533,6 +529,22 @@ pub fn replay(binding: &Binding) -> Result<(), String> {
     if output.is_none() {
         *output = Some(VirtualInput::create()?);
     }
+    Ok(output)
+}
+
+pub(crate) fn validate_replay(binding: &Binding) -> Result<(), String> {
+    if !replay_events(binding)?.is_empty() {
+        drop(virtual_output()?);
+    }
+    Ok(())
+}
+
+pub fn replay(binding: &Binding) -> Result<(), String> {
+    let events = replay_events(binding)?;
+    if events.is_empty() {
+        return Ok(());
+    }
+    let mut output = virtual_output()?;
     let result = events
         .into_iter()
         .try_for_each(|(kind, code, value)| output.as_mut().unwrap().emit(kind, code, value));
@@ -771,5 +783,13 @@ mod tests {
         })
         .unwrap()
         .contains(&(EV_REL, REL_WHEEL, -1)));
+    }
+
+    #[test]
+    fn preflight_checks_binding_before_opening_virtual_input() {
+        assert!(validate_replay(&Binding::Media(0xffff))
+            .unwrap_err()
+            .contains("0xffff"));
+        assert!(validate_replay(&Binding::Keyboard(Vec::new())).is_ok());
     }
 }

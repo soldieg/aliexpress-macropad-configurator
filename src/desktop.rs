@@ -3,6 +3,7 @@ pub use crate::input::{volume_key, volume_slot, DirectInput, InputEvent};
 use crate::linux as native;
 #[cfg(target_os = "macos")]
 use crate::macos as native;
+pub(crate) use native::validate_replay;
 pub use native::{replay, set_startup, shutdown, startup_enabled};
 use std::{
     fs::{self, File, OpenOptions, TryLockError},

@@ -1003,9 +1003,9 @@ impl App {
             return Ok("Ação de volume enviada. O passo é compartilhado pelos giros.".into());
         }
         let managed = self.manages_binding(self.layer, self.slot);
-        #[cfg(target_os = "macos")]
+        #[cfg(not(windows))]
         if managed {
-            macos::validate_replay(&binding)?;
+            platform::validate_replay(&binding)?;
         }
         if !managed {
             let conflict = self.profile().is_some_and(|p| {
@@ -1083,11 +1083,11 @@ impl App {
                 "Salve as ações individuais em Teclado antes de continuar. Faltam {names}."
             ));
         }
-        #[cfg(target_os = "macos")]
+        #[cfg(not(windows))]
         if !restoring {
             for (index, &slot) in keys.iter().enumerate() {
                 if targets & (1 << index) != 0 {
-                    macos::validate_replay(&self.profile().unwrap().bindings[&address(1, slot)])
+                    platform::validate_replay(&self.profile().unwrap().bindings[&address(1, slot)])
                         .map_err(|error| format!("{}: {error}", ui::slot_name(slot)))?;
                 }
             }
